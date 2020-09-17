@@ -38,17 +38,17 @@ void MainMenu::testingMode() {
 void MainMenu::printCredits() {
     std::cout << std::endl;
     std::cout << "----------------------------------" << std::endl;
-    std::cout << "Name: <full name>" << std::endl;
-    std::cout << "Student ID: <student number>" << std::endl;
-    std::cout << "Email: <email address>" << std::endl;
+    std::cout << "Name: Yonathan Kogan" << std::endl;
+    std::cout << "Student ID: s3719826" << std::endl;
+    std::cout << "Email: s3719826@student.rmit.edu.au" << std::endl;
     std::cout << "----------------------------------" << std::endl;
-    std::cout << "Name: <full name>" << std::endl;
-    std::cout << "Student ID: <student number>" << std::endl;
-    std::cout << "Email: <email address>" << std::endl;
+    std::cout << "Name: Ivan Bulosan" << std::endl;
+    std::cout << "Student ID: s3720145" << std::endl;
+    std::cout << "Email: s3720145@student.rmit.edu.au" << std::endl;
     std::cout << "----------------------------------" << std::endl;
-    std::cout << "Name: <full name>" << std::endl;
-    std::cout << "Student ID: <student number>" << std::endl;
-    std::cout << "Email: <email address>" << std::endl;
+    std::cout << "Name: Sheen Wey Chua" << std::endl;
+    std::cout << "Student ID: s3795200" << std::endl;
+    std::cout << "Email: s3795200@student.rmit.edu.au" << std::endl;
     std::cout << "----------------------------------" << std::endl;
     
     displayMenu();  
