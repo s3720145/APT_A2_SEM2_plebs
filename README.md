@@ -1,2 +1,4 @@
-# APT_A2_SEM2
-APT A2
+# APT_A2_SEM2_plebs
+
+- Use "make" to compile
+- "./azul" to run
