@@ -4,12 +4,15 @@
 #define EXIT_SUCCESS 0
 
 int main(int argc, char** argv) {
-    MainMenu mainMenu;
+    MainMenu* mainMenu = new MainMenu();
 
+    std::cout << "Welcome to Azul!" << std::endl;
+    std::cout << "-------------------" << std::endl;
+    
     try {
-        mainMenu.displayMenu();
+        mainMenu->displayMenu();
     } catch(...) {
-        mainMenu.~MainMenu();
+        mainMenu->~MainMenu();
     }
 
     return EXIT_SUCCESS;

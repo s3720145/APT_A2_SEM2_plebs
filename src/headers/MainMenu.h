@@ -12,6 +12,7 @@ public:
     void loadSaveGame();
     void testingMode();
     void printCredits();
+    void prompt();
     void quitGame();
 
 private:
