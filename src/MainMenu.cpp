@@ -58,8 +58,9 @@ void MainMenu::prompt() {
     std::string input;
     std::cout << std::endl << "> ";
     std::cin >> input;
-    if(std::cin.eof() == true || input == "4"){
-        std::cout << "Goodbye" << std::endl;
+    if(std::cin.eof() == true){
+        std::cout << std::endl;
+        quitGame();
     }
     else if(input == "1"){
         //TODO
@@ -70,6 +71,9 @@ void MainMenu::prompt() {
     else if(input == "3"){
         printCredits();
     }
+    else if(input == "4"){
+        quitGame();
+    }
     else{
         std::cout << "Invalid Input";
         prompt();
@@ -77,5 +81,6 @@ void MainMenu::prompt() {
 }
 
 void MainMenu::quitGame() {
-    //throw exception();
+    std::cout << "Goodbye" << std::endl;
+    throw exception();
 }
