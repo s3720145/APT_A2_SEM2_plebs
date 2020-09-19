@@ -2,16 +2,12 @@
 #define PLAYER
 
 #include "Tile.h"
+#include "SinglyLinkedList.h"
 #include <string>
 #include <vector>
 
 #define ARRAY_DIM           5
 #define BROKEN_TILES_MAX    7
-#define ROW_1_START         1
-#define ROW_2_START         2
-#define ROW_3_START         4
-#define ROW_4_START         7
-#define ROW_5_START         11
 
 using std::string;
 using std::vector;
@@ -40,6 +36,7 @@ private:
     int totalScore;
     int currRoundScore;
     int numBrokenTiles;
+    Tile::Colour scoring[ARRAY_DIM];
     Tile::Colour mosaic[ARRAY_DIM][ARRAY_DIM];
     Tile::Colour** storageRows[ARRAY_DIM];
     Tile::Colour* brokenTiles[BROKEN_TILES_MAX];
