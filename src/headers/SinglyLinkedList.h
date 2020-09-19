@@ -10,6 +10,7 @@ class SinglyLinkedList {
 public:
     SinglyLinkedList();
     ~SinglyLinkedList();
+    void initializeBag();
     void addToBack(Tile::Colour tile);
     Node* removeHead();
     string toString();
