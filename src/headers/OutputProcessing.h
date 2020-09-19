@@ -2,6 +2,9 @@
 #define OUTPUTPROCESSING
 
 class OutputProcessing {
+public:
+    
+private:
 
 };
 

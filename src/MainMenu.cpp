@@ -1,10 +1,7 @@
 #include "MainMenu.h"
-#include <iostream>
-
-using std::exception;
 
 MainMenu::MainMenu() {
-
+    gameEngine = new GameEngine();
 }
 
 MainMenu::~MainMenu() {
@@ -23,12 +20,34 @@ void MainMenu::displayMenu() {
     prompt();
 }
 
-void MainMenu::createNewGame() {
+void MainMenu::prompt() {
+    std::string input;
+    std::cout << std::endl << "> ";
+    std::cin >> input;
+    
+    if(std::cin.eof() == true){
+        std::cout << std::endl;
+        quitGame();
+    } else if(input == "1") {
+        createNewGame();
+    } else if(input == "2") {
+        loadSaveGame();
+    } else if(input == "3") {
+        printCredits();
+    } else if(input == "4") {
+        quitGame();
+    } else {
+        std::cout << "Invalid Input";
+        prompt();
+    }
+}
 
+void MainMenu::createNewGame() {
+    gameEngine->newGame();
 }
 
 void MainMenu::loadSaveGame() {
-
+    gameEngine->loadGame();
 }
 
 void MainMenu::testingMode() {
@@ -52,32 +71,6 @@ void MainMenu::printCredits() {
     std::cout << "----------------------------------" << std::endl;
     
     displayMenu();  
-}
-
-void MainMenu::prompt() {
-    std::string input;
-    std::cout << std::endl << "> ";
-    std::cin >> input;
-    if(std::cin.eof() == true){
-        std::cout << std::endl;
-        quitGame();
-    }
-    else if(input == "1"){
-        //TODO
-    }
-    else if(input == "2"){
-        //TODO
-    }
-    else if(input == "3"){
-        printCredits();
-    }
-    else if(input == "4"){
-        quitGame();
-    }
-    else{
-        std::cout << "Invalid Input";
-        prompt();
-     }
 }
 
 void MainMenu::quitGame() {

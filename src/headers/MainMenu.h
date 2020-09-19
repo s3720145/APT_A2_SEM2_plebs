@@ -2,6 +2,9 @@
 #define MAINMENU
 
 #include "GameEngine.h"
+#include <iostream>
+
+using std::exception;
 
 class MainMenu {
 public:
@@ -16,7 +19,7 @@ public:
     void quitGame();
 
 private:
-    
+    GameEngine* gameEngine;
 };
 
 #endif // MAINMENU
