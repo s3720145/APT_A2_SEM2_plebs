@@ -18,50 +18,33 @@ void Player::initialiseMosaic(){
             mosaic[i][j] = Tile::Colour::NoTile;
         }
     }
+    initialiseScoring();
+}
+void Player::initialiseScoring(){
+        for(int i=0; i<ARRAY_DIM; i++){
+       scoring[i] = static_cast<Tile::Colour>(i); 
+    }
+
+    for(int i = 0; i < ARRAY_DIM; ++i) {
+        int counter = 0;
+        for(int j = ARRAY_DIM - i; j < ARRAY_DIM; j++) {
+            scoringMosaic[i][counter] = scoring[j];
+            counter++;
+        }
+
+
+        for(int j = 0; j < ARRAY_DIM - i; j++) {
+            scoringMosaic[i][counter] = scoring[j];
+            counter++;
+        }
+    }
 }
 bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
     bool success = false;
-        int i =0;
-        int j =0;
-    if(row_num == 1){
-        i = 0;
-        j = ARRAY_DIM;
-    }
-    else if(row_num == 2){
-        i = 1;
-        j = ARRAY_DIM -1;
-    }
-    else if(row_num == 3){
-        i = 2;
-        j = ARRAY_DIM -2;
-    }
-    else if(row_num == 4){
-        i = 3;
-        j = ARRAY_DIM -3;
-    }
-    else if(row_num == 5){
-        i = 4;
-        j = ARRAY_DIM -4;
-    }
-    else if(row_num == 6){
-        i = 5;
-        j = ARRAY_DIM -5;
-    }
-    for(int k=ARRAY_DIM; k> j; k--){
-       scoring[ARRAY_DIM-k] = static_cast<Tile::Colour>(k); 
-    }
-    for(int k = 0; k+i<ARRAY_DIM; k++){
-       scoring[k+i] = static_cast<Tile::Colour>(k); 
-    }
-    for(int k=row_num; k<ARRAY_DIM; k++){
-        if(scoring[k] == tile){
-            if(mosaic[i][k] == Tile::Colour::NoTile){
-                mosaic[i][k] = tile;
-                success = true;
-            }
-            else{
-                success = false;
-            }
+    for(int i=0; i<ARRAY_DIM; i++){
+        if(scoringMosaic[row_num-1][i] == tile){
+            mosaic[row_num-1][i] = tile;
+            success = true;
         }
         else{
             success = false;
