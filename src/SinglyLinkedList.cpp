@@ -5,7 +5,7 @@ SinglyLinkedList::SinglyLinkedList(){
 }
 SinglyLinkedList::~SinglyLinkedList(){
 }
-void SinglyLinkedList::initializeBag(){
+void SinglyLinkedList::initializeBag(int arrayDim){
     //todo add a 100 tile bag
 }
 void SinglyLinkedList::addToBack(Tile::Colour tile){
