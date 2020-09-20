@@ -6,25 +6,24 @@ SinglyLinkedList::SinglyLinkedList(){
 SinglyLinkedList::~SinglyLinkedList(){
 }
 void SinglyLinkedList::initializeBag(int arrayDim){
-    Node* currNode = mTail;
+    Node* currNode = mHead;
     for(int i=0; i<20; i++){
         for(int j=0; j<arrayDim; j++){
-            Node* newNode = new Node(static_cast<Tile::Colour>(j))
+            Node* newNode = new Node(static_cast<Tile::Colour>(j));
             if(mHead == nullptr){
                 mHead = newNode; 
                 mTail = newNode;
             }
             else{
+                mTail = newNode;
                 currNode->setNext(newNode);
-                mTail->setNext(new Node())
+                currNode = currNode->getNext();
             }
-            currNode->Node(static_cast<Tile::Colour>(j)); 
-            currNode = currNode->getNext();
         }
     }
 }
 void SinglyLinkedList::addToBack(Tile::Colour tile){
-    Node* newTile = Node(tile);
+    Node* newTile = new Node(tile);
     mTail->setNext(newTile);
     mTail = this->mTail->getNext();
 
