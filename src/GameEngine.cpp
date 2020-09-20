@@ -11,7 +11,20 @@ GameEngine::~GameEngine() {
 }
 
 void GameEngine::newGame() {
-    std::cout << "hello";
+    int numPlayers = 2;
+    string playerName;
+
+    cout << "Starting a New Game" << endl << endl;
+
+    for(int i = 1; i <= numPlayers; ++numPlayers) {
+        cout << "Enter a name for player " << i << endl;
+        cout << "> ";
+        cin >> playerName;
+        cout << endl << endl;
+    }
+
+
+
 }
 
 void GameEngine::loadGame() {
@@ -29,4 +42,3 @@ void GameEngine::newRound() {
 const Gameboard* GameEngine::getGameboard() {
     return this->gameboard;
 }
-
