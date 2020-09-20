@@ -19,7 +19,6 @@ void Player::initialiseMosaic(){
         }
     }
 }
-//todo insert logic and ask about how the 2D array is supposed to be organised if the mosaic needs results in lowercase and uppercase
 bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
     bool success = false;
         int i =0;
