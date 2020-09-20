@@ -5,11 +5,11 @@
 
 class Node {
 public:
-    Node();
+    Node(Tile::Colour tile);
     ~Node();
     const Tile::Colour getTile();
-    const Node* getNext();
-    void setNext(const Node* node);
+    Node* getNext();
+    void setNext(Node* node);
 
 private:
     Tile::Colour tile;
