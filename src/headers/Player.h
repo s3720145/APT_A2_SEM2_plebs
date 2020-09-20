@@ -40,7 +40,7 @@ private:
     Tile::Colour scoring[ARRAY_DIM];
     Tile::Colour scoringMosaic[ARRAY_DIM][ARRAY_DIM];
     Tile::Colour mosaic[ARRAY_DIM][ARRAY_DIM];
-    Tile::Colour** storageRows[ARRAY_DIM];
+    Tile::Colour* storageRows[ARRAY_DIM];
     Tile::Colour* brokenTiles[BROKEN_TILES_MAX];
 };
 
