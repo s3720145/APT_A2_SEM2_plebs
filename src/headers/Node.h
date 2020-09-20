@@ -8,8 +8,8 @@ public:
     Node(Tile::Colour tile);
     ~Node();
     const Tile::Colour getTile();
-    Node getNext();
-    void setNext(Node node);
+    Node* getNext();
+    void setNext(Node* node);
 
 private:
     Tile::Colour tile;

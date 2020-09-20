@@ -6,16 +6,31 @@ SinglyLinkedList::SinglyLinkedList(){
 SinglyLinkedList::~SinglyLinkedList(){
 }
 void SinglyLinkedList::initializeBag(int arrayDim){
-    //todo add a 100 tile bag
+    Node* currNode = mTail;
+    for(int i=0; i<20; i++){
+        for(int j=0; j<arrayDim; j++){
+            Node* newNode = new Node(static_cast<Tile::Colour>(j))
+            if(mHead == nullptr){
+                mHead = newNode; 
+                mTail = newNode;
+            }
+            else{
+                currNode->setNext(newNode);
+                mTail->setNext(new Node())
+            }
+            currNode->Node(static_cast<Tile::Colour>(j)); 
+            currNode = currNode->getNext();
+        }
+    }
 }
 void SinglyLinkedList::addToBack(Tile::Colour tile){
-    Node newTile = Node(tile);
+    Node* newTile = Node(tile);
     mTail->setNext(newTile);
-    mTail = &this->mTail->getNext();
+    mTail = this->mTail->getNext();
 
 }
 Node* SinglyLinkedList::removeHead(){
-    Node* newHead = &this->mHead->getNext();
+    Node* newHead = this->mHead->getNext();
     Node* oldHead = this->mHead;
     this->mHead = newHead;
     return oldHead;
@@ -25,7 +40,7 @@ string SinglyLinkedList::toString(){
     string output;
     while(currNode != this->mTail){
         output.push_back(currNode->getTile());
-        currNode = &currNode->getNext();
+        currNode = currNode->getNext();
     }
     output.push_back(this->mTail->getTile());
     return output;

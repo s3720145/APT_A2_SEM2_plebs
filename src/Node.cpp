@@ -8,10 +8,10 @@ Node::~Node(){
 const Tile::Colour Node::getTile(){
     return this->tile;
 }
-Node Node::getNext(){
-    Node outputNode = *mNext;
+Node* Node::getNext(){
+    Node* outputNode = mNext;
     return outputNode;
 }
-void Node::setNext(Node node){
-    this->mNext = &node;
+void Node::setNext(Node* node){
+    this->mNext = node;
 }
