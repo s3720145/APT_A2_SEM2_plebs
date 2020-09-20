@@ -2,6 +2,7 @@
 #define PLAYER
 
 #include "Tile.h"
+#include "SinglyLinkedList.h"
 #include <string>
 #include <vector>
 
@@ -17,11 +18,10 @@ public:
     ~Player();
 
     void initialiseMosaic();
-    void initialiseMosaic(string mosaicTiles);
+    void initialiseScoring();
     bool insertIntoMosaic(const int row_num, const Tile::Colour tile);
-    void initialiseStorageRows(string storageTiles);
+    void initialiseStorageRows();
     bool insertIntoStorageRow(const int row_num, const Tile::Colour tile);
-    void initialiseBrokenTiles(string brokenTiles);
     bool insertIntoBrokenTiles(const Tile::Colour tile);
 
     const string getPlayerName();
@@ -37,9 +37,11 @@ private:
     int totalScore;
     int currRoundScore;
     int numBrokenTiles;
+    Tile::Colour scoring[ARRAY_DIM];
+    Tile::Colour scoringMosaic[ARRAY_DIM][ARRAY_DIM];
     Tile::Colour mosaic[ARRAY_DIM][ARRAY_DIM];
-    Tile::Colour storageRows[ARRAY_DIM][ARRAY_DIM];
-    Tile::Colour brokenTiles[BROKEN_TILES_MAX];
+    Tile::Colour** storageRows[ARRAY_DIM];
+    Tile::Colour* brokenTiles[BROKEN_TILES_MAX];
 };
 
 #endif // PLAYER
