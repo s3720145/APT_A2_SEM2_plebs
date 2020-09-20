@@ -81,14 +81,11 @@ bool Player::insertIntoStorageRow(const int row_num, const Tile::Colour tile){
     bool insertSuccess;
     if(*storageRows[row_num-1][0] == tile || *storageRows[row_num-1][0] == Tile::Colour::NoTile){
         //itterate through coloumn
-        for(int i=0; i<row_num; i++){
+        for(int i=0; i<row_num-1; i++){
             if(*storageRows[row_num-1][i] == Tile::Colour::NoTile && insertSuccess != true){
                *storageRows[row_num-1][i] = tile;
                 insertSuccess = true; 
             }
-        }
-        if(insertSuccess == false){
-            insertSuccess = insertIntoBrokenTiles(tile);
         }
     }
     else{
@@ -103,10 +100,6 @@ bool Player::insertIntoBrokenTiles(const Tile::Colour tile){
             *brokenTiles[i] = tile;
             insertSuccess = true;
         }
-    }
-    if(insertSuccess == false){
-        //todo add to the back of linked list.
-        insertSuccess = true;
     }
     return insertSuccess;
 }
