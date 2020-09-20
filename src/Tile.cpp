@@ -20,9 +20,10 @@ const char Tile::getColourAsChar(Colour colour){
     else if(colour == Tile::Colour::FirstPlayer){
         colourChar = 'F';
     }
-    else if(colour == Tile::Colour::NoTile){
+    else {
         colourChar = '.';
     }
+    
     return colourChar;
 }
 const int Tile::getColourAsInt(Colour colour){
@@ -45,7 +46,7 @@ const int Tile::getColourAsInt(Colour colour){
     else if(colour == Tile::Colour::FirstPlayer){
         colourInt = 0;
     }
-    else if(colour == Tile::Colour::NoTile){
+    else {
         colourInt = 9;
     }
     return colourInt;

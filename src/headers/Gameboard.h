@@ -2,6 +2,7 @@
 #define GAMEBOARD
 
 #include "SinglyLinkedList.h"
+#include "GenericLinkedList.h"
 #include "Player.h"
 
 #define MAX_PLAYERS 2
@@ -27,14 +28,12 @@ public:
 
 private:
     SinglyLinkedList* tileBag;
-    SinglyLinkedList* players;
+    GenericLinkedList<Player*>* players;
 
     int centreFactorySize;
-    int numPlayers;
     vector<Tile::Colour> centreFactory;
     Tile::Colour factories[ARRAY_DIM][ARRAY_DIM];
 
-    Player* players[MAX_PLAYERS];
     Player* currentPlayer;
 };
 

@@ -1,4 +1,7 @@
 #include "Gameboard.h"
+#include "GenericLinkedList.cpp"
+
+template class GenericLinkedList<Player*>;
 
 Gameboard::Gameboard() {
     tileBag = new SinglyLinkedList();
@@ -19,8 +22,8 @@ void Gameboard::initialiseFactories() {
 }
 
 void Gameboard::addNewPlayer(string playerName, int score) {
-    players[numPlayers] = new Player(playerName, score);
-    numPlayers++;
+    std::cout << "test1" << std::flush;
+    players->addToBack(new Player(playerName, score));
 }
 
 const Player* Gameboard::getCurrentPlayer() {
@@ -28,19 +31,18 @@ const Player* Gameboard::getCurrentPlayer() {
 }
 
 void Gameboard::setNextCurrentPlayer() {
-    if(currentPlayer == players[numPlayers]) {
-        currentPlayer = player
-    }
+    currentPlayer = players->removeHead()->value;
+    players->addToBack(currentPlayer);
 }
 
 const string Gameboard::tileBagToString() {
-
+    return nullptr;
 }
 
 const string Gameboard::centreFactoryToString() {
-
+    return nullptr;
 }
 
 const string Gameboard::factoriesToString() {
-
+    return nullptr;
 }
