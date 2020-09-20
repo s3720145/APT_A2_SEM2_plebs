@@ -16,19 +16,19 @@ void GameEngine::newGame() {
 
     cout << "Starting a New Game" << endl << endl;
 
-    for(int i = 1; i <= numPlayers; ++numPlayers) {
+    for(int i = 1; i <= numPlayers; ++i) {
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
         cin >> playerName;
+        gameboard->addNewPlayer(playerName, 0);
         cout << endl << endl;
     }
 
-
+    
 
 }
 
 void GameEngine::loadGame() {
-
 }
 
 void GameEngine::saveGame() {

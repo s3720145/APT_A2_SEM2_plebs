@@ -4,6 +4,7 @@ Player::Player(string playerName, int totalScore){
 this->playerName = playerName;
 this->totalScore = totalScore;
 }
+
 Player::~Player(){
     //deconstruct the secondary part of the storage array (due to the fact i use new tile)
     for(int i=0; i<ARRAY_DIM; i++){
@@ -12,6 +13,7 @@ Player::~Player(){
         }
     }
 }
+
 void Player::initialiseMosaic(){
     for(int i = 0; i<ARRAY_DIM; i++){
         for(int j = 0; j<ARRAY_DIM; j++){
@@ -20,6 +22,7 @@ void Player::initialiseMosaic(){
     }
     initialiseScoring();
 }
+
 void Player::initialiseScoring(){
         for(int i=0; i<ARRAY_DIM; i++){
        scoring[i] = static_cast<Tile::Colour>(i); 
@@ -39,6 +42,7 @@ void Player::initialiseScoring(){
         }
     }
 }
+
 bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
     bool success = false;
     for(int i=0; i<ARRAY_DIM; i++){
@@ -52,6 +56,7 @@ bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
     }
     return success;
 }
+
 void Player::initialiseStorageRows(){
     for(int i=0; i<ARRAY_DIM; i++){
         storageRows[i] = new Tile::Colour*[i+1];
@@ -60,6 +65,7 @@ void Player::initialiseStorageRows(){
         }
     }
 }
+
 bool Player::insertIntoStorageRow(const int row_num, const Tile::Colour tile){
     bool insertSuccess;
     if(*storageRows[row_num-1][0] == tile || *storageRows[row_num-1][0] == Tile::Colour::NoTile){
@@ -76,6 +82,7 @@ bool Player::insertIntoStorageRow(const int row_num, const Tile::Colour tile){
     }
     return insertSuccess;
 }
+
 bool Player::insertIntoBrokenTiles(const Tile::Colour tile){
     bool insertSuccess = false;
     for(int i=0; i<BROKEN_TILES_MAX; i++){
@@ -86,15 +93,19 @@ bool Player::insertIntoBrokenTiles(const Tile::Colour tile){
     }
     return insertSuccess;
 }
+
 const string Player::getPlayerName(){
     return playerName;
 }
+
 const int Player::getTotalScore(){
     return totalScore;
 }
+
 const int Player::getCurrRoundScore(){
     return currRoundScore;
 }
+
 const string Player::mosaicToString(){
     string output;
     for(int i=0; i < ARRAY_DIM; i++){
@@ -104,6 +115,7 @@ const string Player::mosaicToString(){
     }
     return output;
 }
+
 const string Player::storageRowsToString(){
     string output;
     for(int i=0; i < ARRAY_DIM; i++){
@@ -113,6 +125,7 @@ const string Player::storageRowsToString(){
     }
     return output;
 }
+
 const string Player::brokenTilesToString(){
     string output;
     for(int i=0; i < BROKEN_TILES_MAX; i++){
