@@ -3,15 +3,13 @@
 Player::Player(string playerName, int totalScore){
 this->playerName = playerName;
 this->totalScore = totalScore;
+initialiseMosaic();
+initialiseStorageRows();
 }
 
 Player::~Player(){
     //deconstruct the secondary part of the storage array (due to the fact i use new tile)
-    for(int i=0; i<ARRAY_DIM; i++){
-        for(int j=0; j<i+1; j++){
-            storageRows[i][j] = nullptr;
-        }
-    }
+    
 }
 
 void Player::initialiseMosaic(){
@@ -59,20 +57,20 @@ bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
 
 void Player::initialiseStorageRows(){
     for(int i=0; i<ARRAY_DIM; i++){
-        storageRows[i] = new Tile::Colour*[i+1];
-        for(int j=0; j<i+1; j++){
-            *storageRows[i][j] = Tile::Colour::NoTile;
+        storageRows[i] = new Tile::Colour[i + 1];
+        for(int j=0; j<= i; j++){
+            storageRows[i][j] = Tile::Colour::NoTile;
         }
     }
 }
 
 bool Player::insertIntoStorageRow(const int row_num, const Tile::Colour tile){
     bool insertSuccess;
-    if(*storageRows[row_num-1][0] == tile || *storageRows[row_num-1][0] == Tile::Colour::NoTile){
+    if(storageRows[row_num-1][0] == tile || storageRows[row_num-1][0] == Tile::Colour::NoTile){
         //itterate through coloumn
         for(int i=0; i<row_num-1; i++){
-            if(*storageRows[row_num-1][i] == Tile::Colour::NoTile && insertSuccess != true){
-               *storageRows[row_num-1][i] = tile;
+            if(storageRows[row_num-1][i] == Tile::Colour::NoTile && insertSuccess != true){
+               storageRows[row_num-1][i] = tile;
                 insertSuccess = true; 
             }
         }
@@ -107,20 +105,21 @@ const int Player::getCurrRoundScore(){
 }
 
 const string Player::mosaicToString(){
-    string output;
+    string output = "";
     for(int i=0; i < ARRAY_DIM; i++){
         for(int j=0; j<ARRAY_DIM; j++){
-            output.push_back(getColourAsChar(mosaic[i][j]));
+            output.push_back(Tile::getColourAsChar(mosaic[i][j]));
         }
     }
+
     return output;
 }
 
 const string Player::storageRowsToString(){
-    string output;
+    string output = "";
     for(int i=0; i < ARRAY_DIM; i++){
-        for(int j=0; j<i+1; j++){
-            output.push_back(getColourAsChar(*storageRows[i][j]));
+        for(int j=0; j<i; j++){
+            output.push_back(Tile::getColourAsChar(storageRows[i][j]));
         }
     }
     return output;
@@ -129,7 +128,7 @@ const string Player::storageRowsToString(){
 const string Player::brokenTilesToString(){
     string output;
     for(int i=0; i < BROKEN_TILES_MAX; i++){
-        output.push_back(getColourAsChar(*brokenTiles[i]));
+        output.push_back(Tile::getColourAsChar(*brokenTiles[i]));
     }
     return output;
 }
