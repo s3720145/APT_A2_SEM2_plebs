@@ -47,8 +47,8 @@ void Gameboard::setFactories() {
     }
 }
 
-void Gameboard::addNewPlayer(string playerName, int score) {
-    players->addToBack(new Player(playerName, score));
+void Gameboard::addNewPlayer(string playerName) {
+    players->addToBack(new Player(playerName));
 }
 
 Player* Gameboard::getCurrentPlayer() {
@@ -66,7 +66,7 @@ const string Gameboard::tileBagToString() {
 }
 
 const string Gameboard::centreFactoryToString() {
-    std::stringstream ss;
+    stringstream ss;
 
     for(Tile* tile : centreFactory) {
         ss << tile->getColourAsChar();
@@ -76,7 +76,7 @@ const string Gameboard::centreFactoryToString() {
 }
 
 const string Gameboard::factoriesToString() {
-    std::stringstream ss;
+    stringstream ss;
 
     for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
         ss << row_num + 1 << ": ";

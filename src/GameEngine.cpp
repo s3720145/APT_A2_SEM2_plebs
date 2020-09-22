@@ -13,12 +13,12 @@ GameEngine::~GameEngine() {
 void GameEngine::newGame() {
     cout << "Starting a New Game" << endl << endl;
 
-    for(int i = 1; i <= 4; ++i) {
+    for(int i = 1; i <= MAX_PLAYERS; ++i) {
         string playerName;
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
         cin >> playerName;
-        gameboard->addNewPlayer(playerName, 0);
+        gameboard->addNewPlayer(playerName);
         cout << endl;
     }
 
@@ -45,6 +45,7 @@ void GameEngine::newRound() {
     cout << "Factories:" << endl;
     cout << gameboard->centreFactoryToString() << endl;
     cout << gameboard->factoriesToString() << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
 
 }
 

@@ -11,8 +11,10 @@ Tile::Tile(char colourAsChar) {
         colour = BLACK;
     } else if(colourAsChar == 'L') {
         colour = LIGHT_BLUE;
-    } else {
+    } else if(colourAsChar == 'F'){
         colour = FIRST_PLAYER;
+    } else {
+        // throw exeption
     }
 
     this->colourAsChar = colourAsChar;

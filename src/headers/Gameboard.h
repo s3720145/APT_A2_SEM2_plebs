@@ -10,6 +10,7 @@
 #define FACTORY_WIDTH   4
 
 using std::vector;
+using std::stringstream;
 
 class Gameboard {
 
@@ -20,7 +21,7 @@ public:
     void setTileBag();
     void setFactories();
 
-    void addNewPlayer(string playerName, int score);
+    void addNewPlayer(string playerName);
     Player* getCurrentPlayer();
     void setNextCurrentPlayer();
 
