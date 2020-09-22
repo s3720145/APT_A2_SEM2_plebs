@@ -1,11 +1,13 @@
 #ifndef GAMEBOARD
 #define GAMEBOARD
 
-#include "SinglyLinkedList.h"
 #include "GenericLinkedList.h"
 #include "Player.h"
+#include <fstream>
+#include <sstream>
 
-#define MAX_PLAYERS 2
+#define NUM_PER_TILE    20
+#define FACTORY_WIDTH   4
 
 using std::vector;
 
@@ -15,11 +17,11 @@ public:
     Gameboard();
     ~Gameboard();
 
-    void initialiseTileBag();
-    void initialiseFactories();
+    void setTileBag();
+    void setFactories();
 
     void addNewPlayer(string playerName, int score);
-    const Player* getCurrentPlayer();
+    Player* getCurrentPlayer();
     void setNextCurrentPlayer();
 
     const string tileBagToString();
@@ -27,12 +29,12 @@ public:
     const string factoriesToString();
 
 private:
-    SinglyLinkedList* tileBag;
+    GenericLinkedList<Tile*>* tileBag;
     GenericLinkedList<Player*>* players;
 
     int centreFactorySize;
-    vector<Tile::Colour> centreFactory;
-    Tile::Colour factories[ARRAY_DIM][ARRAY_DIM];
+    vector<Tile*> centreFactory;
+    Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
 
     Player* currentPlayer;
 };

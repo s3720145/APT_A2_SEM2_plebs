@@ -14,26 +14,31 @@ GenericLinkedList<T>::~GenericLinkedList() {
 
 template <typename T>
 void GenericLinkedList<T>::addToBack(T value) {
-    std::cout << "test" << std::flush << std::endl;
-    std::cout << "test" << std::flush;
+    GenericNode<T>* newNode = new GenericNode<T>(value);
+
+    // if empty list
     if(mHead == nullptr) {
-        GNode<T>* newNode = new GNode<T>(value);
         mHead = newNode;
         mTail = newNode;
     } else {
-        GNode<T>* newNode = new GNode<T>(value);
-        mTail->mNext = newNode;
-        newNode = mTail;
+        mTail->setNext(newNode);
+        mTail = mTail->getNext();
     }
 }
 
 template <typename T>
-GNode<T>* GenericLinkedList<T>::removeHead() {
-    GNode<T>* oldNode = mHead;
+GenericNode<T>* GenericLinkedList<T>::getHead() {
+    return mHead;
+}
+
+template <typename T>
+GenericNode<T>* GenericLinkedList<T>::removeHead() {
+    GenericNode<T>* removedNode = mHead;
 
     if(mHead != nullptr) {
-        mHead->mNext = nullptr;
+        mHead = removedNode->getNext();
+        removedNode->setNext(nullptr);
     }
 
-    return oldNode;
+    return removedNode;
 }

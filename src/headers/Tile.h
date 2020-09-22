@@ -1,19 +1,26 @@
-#ifndef TILE
-#define TILE
+#ifndef TILE_H
+#define TILE_H
 
-namespace Tile {
-    enum Colour {
-        Red,
-        Yellow,
-        DarkBlue,
-        LightBlue,
-        Black,
-        FirstPlayer,
-        NoTile
-    };
-    const char getColourAsChar(Colour colour);
-
-    const int getColourAsInt(Colour colour);
+enum Colour {
+    DARK_BLUE,
+    YELLOW,
+    RED,
+    BLACK,
+    LIGHT_BLUE,
+    FIRST_PLAYER,
 };
 
-#endif // TILE
+class Tile {
+public:
+    Tile(char colourAsChar);
+    ~Tile();
+    Colour getColour();
+    char getColourAsChar();
+
+private:
+    Colour colour;
+    char colourAsChar;
+    bool isInMosaic;
+};
+
+#endif // TILE_H

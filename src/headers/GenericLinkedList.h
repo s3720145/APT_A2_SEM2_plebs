@@ -1,16 +1,7 @@
 #ifndef GENERICLINKEDLIST_H
 #define GENERICLINKEDLIST_H
 
-template <typename T> 
-struct GNode {
-    T value;
-    GNode<T>* mNext;
-
-    GNode(T value) {
-        value = value;
-        mNext = nullptr;
-    }
-};
+#include "GenericNode.h"
 
 template <typename T> 
 class GenericLinkedList {
@@ -18,11 +9,12 @@ public:
     GenericLinkedList();
     ~GenericLinkedList();
     void addToBack(T value);
-    GNode<T>* removeHead();
+    GenericNode<T>* getHead();
+    GenericNode<T>* removeHead();
 
 private:
-    GNode<T>* mHead;
-    GNode<T>* mTail;
+    GenericNode<T>* mHead;
+    GenericNode<T>* mTail;
 };
 
 #endif // GENERICLINKEDLIST_H

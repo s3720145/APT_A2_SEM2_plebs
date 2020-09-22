@@ -1,53 +1,32 @@
 #include "Tile.h"
 
-const char Tile::getColourAsChar(Colour colour){
-    char colourChar;
-    if(colour == Tile::Colour::Black){
-        colourChar = 'U';
+Tile::Tile(char colourAsChar) {
+    if(colourAsChar == 'B') {
+        colour = DARK_BLUE;
+    } else if(colourAsChar == 'Y') {
+        colour = YELLOW;
+    } else if(colourAsChar == 'R') {
+        colour = RED;
+    } else if(colourAsChar == 'U') {
+        colour = BLACK;
+    } else if(colourAsChar == 'L') {
+        colour = LIGHT_BLUE;
+    } else {
+        colour = FIRST_PLAYER;
     }
-    else if(colour == Tile::Colour::DarkBlue){
-        colourChar = 'B';
-    }
-    else if(colour == Tile::Colour::LightBlue){
-        colourChar = 'L';
-    }
-    else if(colour == Tile::Colour::Yellow){
-        colourChar = 'Y';
-    }
-    else if(colour == Tile::Colour::Red){
-        colourChar = 'R';
-    }
-    else if(colour == Tile::Colour::FirstPlayer){
-        colourChar = 'F';
-    }
-    else {
-        colourChar = '.';
-    }
-    
-    return colourChar;
+
+    this->colourAsChar = colourAsChar;
+    isInMosaic = false;
 }
-const int Tile::getColourAsInt(Colour colour){
-    int colourInt;
-    if(colour == Tile::Colour::Black){
-        colourInt = 5;
-    }
-    else if(colour == Tile::Colour::DarkBlue){
-        colourInt = 3;
-    }
-    else if(colour == Tile::Colour::LightBlue){
-        colourInt = 4;
-    }
-    else if(colour == Tile::Colour::Yellow){
-        colourInt = 2;
-    }
-    else if(colour == Tile::Colour::Red){
-        colourInt = 1;
-    }
-    else if(colour == Tile::Colour::FirstPlayer){
-        colourInt = 0;
-    }
-    else {
-        colourInt = 9;
-    }
-    return colourInt;
+
+Tile::~Tile() {
+
+}
+
+Colour Tile::getColour() {
+    return colour;
+}
+
+char Tile::getColourAsChar(){
+    return colourAsChar;
 }
