@@ -24,6 +24,8 @@ void GameEngine::newGame() {
 
     cout << "Let's Play!"<< endl << endl;
 
+    gameboard->setTileBag();
+    gameboard->setFactories();
     gameboard->setNextCurrentPlayer();
 
     newRound();
@@ -37,13 +39,27 @@ void GameEngine::saveGame() {
 }
 
 void GameEngine::newRound() {
-    gameboard->setTileBag();
-    gameboard->setFactories();
-
     cout << "=== Start Round ===" << endl;
     cout << "TURN FOR PLAYER: " << gameboard->getCurrentPlayer()->getPlayerName() << endl;
     cout << "Factories:" << endl;
-    cout << gameboard->centreFactoryToString() << endl;
+    cout << gameboard->factoriesToString() << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+
+    gameboard->FactoryTilesToPlayer(1, 1, BLACK);
+    gameboard->FactoryTilesToPlayer(1, 1, BLACK);
+
+    cout << gameboard->factoriesToString() << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+
+    gameboard->FactoryTilesToPlayer(2, 3, DARK_BLUE);
+    gameboard->FactoryTilesToPlayer(3, 3, LIGHT_BLUE);
+    gameboard->FactoryTilesToPlayer(0, 5, RED);
+
+    cout << gameboard->factoriesToString() << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+
+    gameboard->getCurrentPlayer()->cleanUp();
+
     cout << gameboard->factoriesToString() << endl;
     cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
 

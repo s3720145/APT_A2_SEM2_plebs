@@ -2,25 +2,24 @@
 #define TILE_H
 
 enum Colour {
-    DARK_BLUE,
-    YELLOW,
-    RED,
-    BLACK,
-    LIGHT_BLUE,
-    FIRST_PLAYER,
+    DARK_BLUE = 'B',
+    YELLOW = 'Y',
+    RED = 'R',
+    BLACK = 'U',
+    LIGHT_BLUE = 'L',
+    FIRST_PLAYER = 'F',
 };
 
 class Tile {
 public:
     Tile(char colourAsChar);
+    // no need for move constructor as Tile only contains an enum
     ~Tile();
     Colour getColour();
     char getColourAsChar();
 
 private:
     Colour colour;
-    char colourAsChar;
-    bool isInMosaic;
 };
 
 #endif // TILE_H

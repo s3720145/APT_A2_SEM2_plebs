@@ -10,7 +10,8 @@ public:
     ~GenericLinkedList();
     void addToBack(T value);
     GenericNode<T>* getHead();
-    GenericNode<T>* removeHead();
+    // returns value stored within node
+    T removeHead();
 
 private:
     GenericNode<T>* mHead;

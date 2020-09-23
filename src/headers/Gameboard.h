@@ -20,13 +20,15 @@ public:
 
     void setTileBag();
     void setFactories();
+    void insertIntoCentreFactory(Tile* tile);
+
+    // methods insert tiles from factories to player storage row
+    bool FactoryTilesToPlayer(int factory_row, int storage_row, Colour colour);
 
     void addNewPlayer(string playerName);
     Player* getCurrentPlayer();
     void setNextCurrentPlayer();
 
-    const string tileBagToString();
-    const string centreFactoryToString();
     const string factoriesToString();
 
 private:

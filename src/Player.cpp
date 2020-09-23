@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(string playerName) {
     this->playerName = playerName;
@@ -36,57 +37,67 @@ void Player::setTilePositions() {
     }
 }
 
-bool Player::isInMosaicRow(const int row_num, Tile* tile) {
+bool Player::isInMosaicRow(const int row_num, Colour colour) {
     bool inMosaic = false;
 
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
-        if(mosaic[row_num][col_num] != nullptr && mosaic[row_num][col_num]->getColourAsChar() == tile->getColourAsChar()) {
+        if(mosaic[row_num][col_num] != nullptr && mosaic[row_num][col_num]->getColourAsChar() == colour) {
             inMosaic = true;
         }
     }
 
-    return move(inMosaic);
+    return inMosaic;
+}
+
+
+// returns false if we cannot insert even 1 tile
+bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
+    bool cannotInsert = false;
+
+    if(storageRows[row_num][0] != nullptr && storageRows[row_num][0]->getColour() != colour) {
+        cannotInsert = true;
+    } else if(storageRows[row_num][row_num] != nullptr) {
+        cannotInsert = true;
+    } else if(isInMosaicRow(row_num, colour) == true) {
+        cannotInsert = true;
+    }
+
+    return cannotInsert;
 }
 
 void Player::insertIntoMosaic(const int row_num, Tile* tile){
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
         if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
-            mosaic[row_num][col_num] = move(tile);
+            mosaic[row_num][col_num] = tile;
         }
     }
 
     // have to calculate score of the insert
 }
 
-bool Player::insertIntoStorageRow(const int row_num, Tile* tile){
+bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles){
     bool insertSuccess = false;
 
-    if(isInMosaicRow(row_num, tile) == false) {
-        if(storageRows[row_num][0] == nullptr) {
-            storageRows[row_num][0] = move(tile);
-            insertSuccess = true;
-        } else if(storageRows[row_num][0]->getColourAsChar() == tile->getColourAsChar()) {
-            for(int col_num = 1; col_num < row_num; ++col_num) {
-                if(storageRows[row_num][col_num] == nullptr && insertSuccess == false) {
-                    storageRows[row_num][col_num] = move(tile);
-                    insertSuccess = true;
-                }
-            }
+    for(int i = 0; i < num_tiles; ++i) {
+        if(storageRows[row_num][i] == nullptr && i <= row_num) {
+            storageRows[row_num][i] = tiles[i];
+        } else {
+            insertIntoBrokenTiles(tiles[i]);
         }
     }
-    
-    return move(insertSuccess);
+
+    return insertSuccess;
 }
 
 bool Player::insertIntoBrokenTiles(Tile* tile){
     bool insertSuccess = false;
 
     if(numBrokenTiles != BROKEN_TILES_MAX) {
-        brokenTiles[numBrokenTiles] = move(tile);
+        brokenTiles[numBrokenTiles] = tile;
         ++numBrokenTiles;
     }
 
-    return move(insertSuccess);
+    return insertSuccess;
 }
 
 Tile** Player::cleanUp() {
@@ -94,37 +105,46 @@ Tile** Player::cleanUp() {
 
     // check if storage row is full
     for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
+        // inserts into mosaic when the row is full
         if(storageRows[row_num][row_num] != nullptr) {
-            // inserts into mosaic when the row is full
-            insertIntoMosaic(row_num, move(storageRows[row_num][row_num]));
+            insertIntoMosaic(row_num, storageRows[row_num][row_num]);
 
             // sends rest of tiles in storage row to returningTiles
-            for(int col_num = 0; col_num < row_num - 1; ++col_num) {
-                returningTiles[col_num] = move(storageRows[row_num][col_num]);
+            for(int col_num = 0; col_num <= row_num; ++col_num) {
+                returningTiles[col_num] = storageRows[row_num][col_num];
+                storageRows[row_num][col_num] = nullptr;
             }
         }
     }
 
     for(int i = 0; i < numBrokenTiles; i++){
-        returningTiles[i] = move(brokenTiles[i]);
+        returningTiles[i] = brokenTiles[i];
+        brokenTiles[i] = nullptr;
     }
+    numBrokenTiles = 0;
 
-    return move(returningTiles);
+    return std::move(returningTiles);
 }
 
-string Player::getPlayerName(){
+int Player::calculateScore() {
+    int score = 0;
+
+    return score;
+}
+
+string Player::getPlayerName() {
     return playerName;
 }
 
-const int Player::getTotalScore(){
+const int Player::getTotalScore() {
     return totalScore;
 }
 
-const int Player::getCurrRoundScore(){
+const int Player::getCurrRoundScore() {
     return currRoundScore;
 }
 
-const string Player::playerBoardToString(){
+const string Player::playerBoardToString() {
     stringstream ss;
     
     ss << "Mosaic for " << playerName << ":\n";
@@ -140,7 +160,7 @@ const string Player::playerBoardToString(){
             if(storageRows[row_num][col_num] == nullptr) {
                 ss << ". ";
             } else {
-                ss << storageRows[row_num][col_num]->getColourAsChar() << ' ';
+                ss << storageRows[row_num][col_num]->getColourAsChar() << " ";
             }
         }
 
@@ -149,18 +169,18 @@ const string Player::playerBoardToString(){
         
         for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
             if(mosaic[row_num][col_num] != nullptr) {
-                ss << ' ' << mosaic[row_num][col_num]->getColourAsChar();
+                ss << " " << mosaic[row_num][col_num]->getColourAsChar();
             } else {
-                ss << ' ' << tilePositions[row_num][col_num];
+                ss << " " << tilePositions[row_num][col_num];
             }
         }
         
-        ss << '\n';
+        ss << "\n";
     }
 
     ss << "broken: ";
     for(int i = 0; i < numBrokenTiles; i++) {
-        ss << brokenTiles[i]->getColourAsChar() << " \n";
+        ss << brokenTiles[i]->getColourAsChar() << " ";
     }
 
     return ss.str();

@@ -12,7 +12,6 @@
 using std::string;
 using std::stringstream;
 using std::vector;
-using std::move;
 
 class Player {
 public:
@@ -20,11 +19,13 @@ public:
     ~Player();
 
     void setTilePositions();
-    bool isInMosaicRow(const int row_num, Tile* tile);
+    bool isInMosaicRow(const int row_num, Colour colour);
+    bool cannotInsertIntoStorageRow(int row_num, Colour colour);
     void insertIntoMosaic(const int row_num, Tile* tile);
-    bool insertIntoStorageRow(const int row_num, Tile* tile);
+    bool insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles);
     bool insertIntoBrokenTiles(Tile* tile);
     Tile** cleanUp();
+    int calculateScore();
 
     string getPlayerName();
     const int getTotalScore();

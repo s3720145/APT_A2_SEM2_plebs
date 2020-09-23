@@ -32,13 +32,15 @@ GenericNode<T>* GenericLinkedList<T>::getHead() {
 }
 
 template <typename T>
-GenericNode<T>* GenericLinkedList<T>::removeHead() {
+T GenericLinkedList<T>::removeHead() {
+    T headValue = mHead->getValue();
     GenericNode<T>* removedNode = mHead;
 
     if(mHead != nullptr) {
-        mHead = removedNode->getNext();
-        removedNode->setNext(nullptr);
+        mHead = mHead->getNext();
+        delete removedNode;
+        removedNode = nullptr;
     }
 
-    return removedNode;
+    return std::move(headValue);
 }
