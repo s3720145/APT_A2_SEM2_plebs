@@ -31,6 +31,7 @@ public:
     void setNextCurrentPlayer();
 
     bool isEndOfRound();
+    void endRound();
 
     string playerNamesToString();
     const string factoriesToString();

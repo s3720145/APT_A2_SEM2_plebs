@@ -25,8 +25,6 @@ void GameEngine::newGame() {
     cout << "Let's Play!"<< endl << endl;
 
     gameboard->setTileBag();
-    gameboard->setFactories();
-    gameboard->setNextCurrentPlayer();
 
     for(int i = 0; i < NUM_ROUNDS; ++i) {
         newRound();
@@ -41,11 +39,21 @@ void GameEngine::loadGame() {
 }
 
 void GameEngine::newRound() {
+    // TODO:
+    // Each round, whoever first chooses from the centre pile takes the first player marker, adds it to their floor
+    // and will then be first player next round, at which point they will add it to the centre for someone to take the
+    // following round.
+    
+    gameboard->setFactories();
+    gameboard->setNextCurrentPlayer();
+
     cout << "=== Start Round ===" << endl;
 
     while(gameboard->isEndOfRound() == false) {
         newPlayerTurn();
     }
+
+    gameboard->endRound();
 
     cout << "=== END OF ROUND ===" << endl;
 }
@@ -76,11 +84,7 @@ void GameEngine::newPlayerTurn() {
         cin.clear();
     } while(successfulTurn == false);
 
-    std::cout << "test" << std::endl;
-
     gameboard->setNextCurrentPlayer();
-
-    std::cout << "test1" << std::endl;
 }
 
 const Gameboard* GameEngine::getGameboard() {

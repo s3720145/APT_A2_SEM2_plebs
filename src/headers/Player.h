@@ -24,7 +24,7 @@ public:
     void insertIntoMosaic(const int row_num, Tile* tile);
     bool insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles);
     bool insertIntoBrokenTiles(Tile* tile);
-    Tile** cleanUp();
+    vector<Tile*> cleanUp();
     int calculateScore();
 
     string getPlayerName();

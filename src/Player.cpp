@@ -100,8 +100,9 @@ bool Player::insertIntoBrokenTiles(Tile* tile){
     return insertSuccess;
 }
 
-Tile** Player::cleanUp() {
-    Tile** returningTiles = new Tile*[numBrokenTiles];
+vector<Tile*> Player::cleanUp() {
+    //Tile** returningTiles = new Tile*[numBrokenTiles];
+    vector<Tile*> returningTiles;
 
     // check if storage row is full
     for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
@@ -111,19 +112,19 @@ Tile** Player::cleanUp() {
 
             // sends rest of tiles in storage row to returningTiles
             for(int col_num = 0; col_num <= row_num; ++col_num) {
-                returningTiles[col_num] = storageRows[row_num][col_num];
+                returningTiles.push_back(storageRows[row_num][col_num]);
                 storageRows[row_num][col_num] = nullptr;
             }
         }
     }
 
     for(int i = 0; i < numBrokenTiles; i++){
-        returningTiles[i] = brokenTiles[i];
+        returningTiles.push_back(brokenTiles[i]);
         brokenTiles[i] = nullptr;
     }
     numBrokenTiles = 0;
 
-    return std::move(returningTiles);
+    return returningTiles;
 }
 
 // TODO

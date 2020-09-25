@@ -119,6 +119,19 @@ bool Gameboard::isEndOfRound() {
     return centreFactorySize == 0 ? true : false;
 }
 
+void Gameboard::endRound() {
+    vector<Tile*> returningTiles;
+
+    for(int i = 0; i < 2; ++i) {
+        setNextCurrentPlayer();
+        returningTiles = currentPlayer->cleanUp();
+        for(Tile* tile : returningTiles) {
+            tileBag->addToBack(tile);
+        }
+    }
+    setNextCurrentPlayer();
+}
+
 string Gameboard::playerNamesToString() {
     stringstream ss;
 
