@@ -28,43 +28,62 @@ void GameEngine::newGame() {
     gameboard->setFactories();
     gameboard->setNextCurrentPlayer();
 
-    newRound();
+    for(int i = 0; i < NUM_ROUNDS; ++i) {
+        newRound();
+    }
 }
 
+// TODO
 void GameEngine::loadGame() {
-}
+    cout << "Enter file name: " << endl;
 
-void GameEngine::saveGame() {
 
 }
 
 void GameEngine::newRound() {
     cout << "=== Start Round ===" << endl;
+
+    while(gameboard->isEndOfRound() == false) {
+        newPlayerTurn();
+    }
+
+    cout << "=== END OF ROUND ===" << endl;
+}
+
+void GameEngine::newPlayerTurn() {
+    string playerInput;
+    bool successfulTurn = false;
+
     cout << "TURN FOR PLAYER: " << gameboard->getCurrentPlayer()->getPlayerName() << endl;
     cout << "Factories:" << endl;
     cout << gameboard->factoriesToString() << endl;
-    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl << endl;
 
-    gameboard->FactoryTilesToPlayer(1, 1, BLACK);
-    gameboard->FactoryTilesToPlayer(1, 1, BLACK);
+    do {
+        cout << "> ";
+        std::getline(cin >> std::ws, playerInput);
 
-    cout << gameboard->factoriesToString() << endl;
-    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+        if(!cin || playerInput == "quit") {
+            throw std::exception();
+        }
 
-    gameboard->FactoryTilesToPlayer(2, 3, DARK_BLUE);
-    gameboard->FactoryTilesToPlayer(3, 3, LIGHT_BLUE);
-    gameboard->FactoryTilesToPlayer(0, 5, RED);
+        try {
+            successfulTurn = inputProcessing->processPlayerInput(playerInput, gameboard);
+        } catch(...) {
+            // cout << "Turn unsuccessful" << endl;
+        }
 
-    cout << gameboard->factoriesToString() << endl;
-    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+        cin.clear();
+    } while(successfulTurn == false);
 
-    gameboard->getCurrentPlayer()->cleanUp();
+    std::cout << "test" << std::endl;
 
-    cout << gameboard->factoriesToString() << endl;
-    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl;
+    gameboard->setNextCurrentPlayer();
 
+    std::cout << "test1" << std::endl;
 }
 
 const Gameboard* GameEngine::getGameboard() {
     return this->gameboard;
 }
+

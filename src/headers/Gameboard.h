@@ -23,17 +23,22 @@ public:
     void insertIntoCentreFactory(Tile* tile);
 
     // methods insert tiles from factories to player storage row
+    // if storage_row is 0, insert into broken tiles
     bool FactoryTilesToPlayer(int factory_row, int storage_row, Colour colour);
 
     void addNewPlayer(string playerName);
     Player* getCurrentPlayer();
     void setNextCurrentPlayer();
 
+    bool isEndOfRound();
+
+    string playerNamesToString();
     const string factoriesToString();
 
 private:
     GenericLinkedList<Tile*>* tileBag;
     GenericLinkedList<Player*>* players;
+    vector<string> playerNames;
 
     int centreFactorySize;
     vector<Tile*> centreFactory;

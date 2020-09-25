@@ -19,8 +19,8 @@ public:
     ~GameEngine();
     void newGame();
     void loadGame();
-    void saveGame();
     void newRound();
+    void newPlayerTurn();
 
     const Gameboard* getGameboard();
 

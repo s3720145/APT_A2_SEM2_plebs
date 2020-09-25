@@ -57,16 +57,21 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
     vector<Tile*> insertedTiles;
     int numInsertedTiles = 0;
     
-    if(currentPlayer->cannotInsertIntoStorageRow(storage_row - 1, colour) == false) {
+    if(storage_row == 0 || currentPlayer->cannotInsertIntoStorageRow(storage_row - 1, colour) == false) {
         if(factory_row == 0) {
-            for(int i = 0; i < centreFactorySize; ++i) {
-                if(centreFactory[i]->getColour() == colour) {
-                    insertedTiles.push_back(centreFactory[i]);
-                    centreFactory.erase(centreFactory.begin() + i);
+            int counter = 0;
+            while(counter < centreFactorySize) {
+                if(centreFactory[counter]->getColour() == colour) {
+                    insertedTiles.push_back(centreFactory[counter]);
+                    centreFactory.erase(centreFactory.begin() + counter);
                     ++numInsertedTiles;
-                } else if(centreFactory[i]->getColour() == FIRST_PLAYER) {
-                    currentPlayer->insertIntoBrokenTiles(centreFactory[i]);
-                    centreFactory.erase(centreFactory.begin() + i);
+                    --centreFactorySize;
+                } else if(centreFactory[counter]->getColour() == FIRST_PLAYER) {
+                    currentPlayer->insertIntoBrokenTiles(centreFactory[counter]);
+                    centreFactory.erase(centreFactory.begin() + counter);
+                    --centreFactorySize;
+                } else {
+                    ++counter;
                 }
             }
         } else {
@@ -82,8 +87,13 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
             }
         }
 
-        if(numInsertedTiles > 0) {
+        if(numInsertedTiles > 0 && storage_row != 0) {
             currentPlayer->insertIntoStorageRow(storage_row - 1, numInsertedTiles, insertedTiles);
+            operationSuccess = true;
+        } else {
+            for(Tile* tile : insertedTiles) {
+                currentPlayer->insertIntoBrokenTiles(tile);
+            }
             operationSuccess = true;
         }
     }
@@ -93,6 +103,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
 
 void Gameboard::addNewPlayer(string playerName) {
     players->addToBack(new Player(playerName));
+    playerNames.push_back(playerName);
 }
 
 Player* Gameboard::getCurrentPlayer() {
@@ -102,6 +113,20 @@ Player* Gameboard::getCurrentPlayer() {
 void Gameboard::setNextCurrentPlayer() {
     currentPlayer = players->removeHead();
     players->addToBack(currentPlayer);
+}
+
+bool Gameboard::isEndOfRound() {
+    return centreFactorySize == 0 ? true : false;
+}
+
+string Gameboard::playerNamesToString() {
+    stringstream ss;
+
+    for(int i = 0; i < 2; ++i) {
+        ss << playerNames[i] << '\n';
+    }
+
+    return ss.str();
 }
 
 const string Gameboard::factoriesToString() {

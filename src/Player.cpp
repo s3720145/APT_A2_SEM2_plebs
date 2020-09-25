@@ -72,10 +72,10 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
         }
     }
 
-    // have to calculate score of the insert
+    // TODO SCORING CODE HERE
 }
 
-bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles){
+bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
     bool insertSuccess = false;
 
     for(int i = 0; i < num_tiles; ++i) {
@@ -126,6 +126,7 @@ Tile** Player::cleanUp() {
     return std::move(returningTiles);
 }
 
+// TODO
 int Player::calculateScore() {
     int score = 0;
 
