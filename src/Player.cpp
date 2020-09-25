@@ -49,7 +49,6 @@ bool Player::isInMosaicRow(const int row_num, Colour colour) {
     return inMosaic;
 }
 
-
 // returns false if we cannot insert even 1 tile
 bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
     bool cannotInsert = false;
