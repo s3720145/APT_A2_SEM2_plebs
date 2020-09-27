@@ -1,10 +1,17 @@
 #include "Player.h"
+#include <iostream>
 
-Player::Player(string playerName, int totalScore){
-this->playerName = playerName;
-this->totalScore = totalScore;
-initialiseMosaic();
-initialiseStorageRows();
+Player::Player(string playerName) {
+    this->playerName = playerName;
+    totalScore = 0;
+    numBrokenTiles = 0;
+
+    setTilePositions();
+
+    // creating a staggered array
+    for(int row_num = 0; row_num < ARRAY_DIM; row_num++){
+        storageRows[row_num] = new Tile*[row_num + 1];
+    }
 }
 
 Player::~Player(){
@@ -12,123 +19,170 @@ Player::~Player(){
     
 }
 
-void Player::initialiseMosaic(){
-    for(int i = 0; i<ARRAY_DIM; i++){
-        for(int j = 0; j<ARRAY_DIM; j++){
-            mosaic[i][j] = Tile::Colour::NoTile;
-        }
-    }
-    initialiseScoring();
-}
+void Player::setTilePositions() {
+    char tileTypesLowerCase[] = {'b','y','r','u','l'};
 
-void Player::initialiseScoring(){
-        for(int i=0; i<ARRAY_DIM; i++){
-       scoring[i] = static_cast<Tile::Colour>(i); 
-    }
-
-    for(int i = 0; i < ARRAY_DIM; ++i) {
+    for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
         int counter = 0;
-        for(int j = ARRAY_DIM - i; j < ARRAY_DIM; j++) {
-            scoringMosaic[i][counter] = scoring[j];
+
+        for(int col_num = ARRAY_DIM - row_num; col_num < ARRAY_DIM; col_num++) {
+            tilePositions[row_num][counter] = tileTypesLowerCase[col_num];
             counter++;
         }
 
-
-        for(int j = 0; j < ARRAY_DIM - i; j++) {
-            scoringMosaic[i][counter] = scoring[j];
+        for(int col_num = 0; col_num < ARRAY_DIM - row_num; col_num++) {
+            tilePositions[row_num][counter] = tileTypesLowerCase[col_num];
             counter++;
         }
     }
 }
 
-bool Player::insertIntoMosaic(const int row_num, const Tile::Colour tile){
-    bool success = false;
-    for(int i=0; i<ARRAY_DIM; i++){
-        if(scoringMosaic[row_num-1][i] == tile){
-            mosaic[row_num-1][i] = tile;
-            success = true;
-        }
-        else{
-            success = false;
+bool Player::isInMosaicRow(const int row_num, Colour colour) {
+    bool inMosaic = false;
+
+    for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
+        if(mosaic[row_num][col_num] != nullptr && mosaic[row_num][col_num]->getColourAsChar() == colour) {
+            inMosaic = true;
         }
     }
-    return success;
+
+    return inMosaic;
 }
 
-void Player::initialiseStorageRows(){
-    for(int i=0; i<ARRAY_DIM; i++){
-        storageRows[i] = new Tile::Colour[i + 1];
-        for(int j=0; j<= i; j++){
-            storageRows[i][j] = Tile::Colour::NoTile;
+// returns false if we cannot insert even 1 tile
+bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
+    bool cannotInsert = false;
+
+    if(storageRows[row_num][0] != nullptr && storageRows[row_num][0]->getColour() != colour) {
+        cannotInsert = true;
+    } else if(storageRows[row_num][row_num] != nullptr) {
+        cannotInsert = true;
+    } else if(isInMosaicRow(row_num, colour) == true) {
+        cannotInsert = true;
+    }
+
+    return cannotInsert;
+}
+
+void Player::insertIntoMosaic(const int row_num, Tile* tile){
+    for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
+        if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
+            mosaic[row_num][col_num] = tile;
         }
     }
+
+    // TODO SCORING CODE HERE
 }
 
-bool Player::insertIntoStorageRow(const int row_num, const Tile::Colour tile){
-    bool insertSuccess;
-    if(storageRows[row_num-1][0] == tile || storageRows[row_num-1][0] == Tile::Colour::NoTile){
-        //itterate through coloumn
-        for(int i=0; i<row_num-1; i++){
-            if(storageRows[row_num-1][i] == Tile::Colour::NoTile && insertSuccess != true){
-               storageRows[row_num-1][i] = tile;
-                insertSuccess = true; 
+bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
+    bool insertSuccess = false;
+
+    for(int i = 0; i < num_tiles; ++i) {
+        if(storageRows[row_num][i] == nullptr && i <= row_num) {
+            storageRows[row_num][i] = tiles[i];
+        } else {
+            insertIntoBrokenTiles(tiles[i]);
+        }
+    }
+
+    return insertSuccess;
+}
+
+bool Player::insertIntoBrokenTiles(Tile* tile){
+    bool insertSuccess = false;
+
+    if(numBrokenTiles != BROKEN_TILES_MAX) {
+        brokenTiles[numBrokenTiles] = tile;
+        ++numBrokenTiles;
+    }
+
+    return insertSuccess;
+}
+
+vector<Tile*> Player::cleanUp() {
+    //Tile** returningTiles = new Tile*[numBrokenTiles];
+    vector<Tile*> returningTiles;
+
+    // check if storage row is full
+    for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
+        // inserts into mosaic when the row is full
+        if(storageRows[row_num][row_num] != nullptr) {
+            insertIntoMosaic(row_num, storageRows[row_num][row_num]);
+
+            // sends rest of tiles in storage row to returningTiles
+            for(int col_num = 0; col_num <= row_num; ++col_num) {
+                returningTiles.push_back(storageRows[row_num][col_num]);
+                storageRows[row_num][col_num] = nullptr;
             }
         }
     }
-    else{
-        insertSuccess = false;
+
+    for(int i = 0; i < numBrokenTiles; i++){
+        returningTiles.push_back(brokenTiles[i]);
+        brokenTiles[i] = nullptr;
     }
-    return insertSuccess;
+    numBrokenTiles = 0;
+
+    return returningTiles;
 }
 
-bool Player::insertIntoBrokenTiles(const Tile::Colour tile){
-    bool insertSuccess = false;
-    for(int i=0; i<BROKEN_TILES_MAX; i++){
-        if(brokenTiles[i] == nullptr && insertSuccess != true){
-            *brokenTiles[i] = tile;
-            insertSuccess = true;
-        }
-    }
-    return insertSuccess;
+// TODO
+int Player::calculateScore() {
+    int score = 0;
+
+    return score;
 }
 
-const string Player::getPlayerName(){
+string Player::getPlayerName() {
     return playerName;
 }
 
-const int Player::getTotalScore(){
+const int Player::getTotalScore() {
     return totalScore;
 }
 
-const int Player::getCurrRoundScore(){
+const int Player::getCurrRoundScore() {
     return currRoundScore;
 }
 
-const string Player::mosaicToString(){
-    string output = "";
-    for(int i=0; i < ARRAY_DIM; i++){
-        for(int j=0; j<ARRAY_DIM; j++){
-            output.push_back(Tile::getColourAsChar(mosaic[i][j]));
+const string Player::playerBoardToString() {
+    stringstream ss;
+    
+    ss << "Mosaic for " << playerName << ":\n";
+
+    for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
+        ss << row_num + 1 << ": ";
+        // Prints the storage rows
+        for(int col_num = 1; col_num < ARRAY_DIM - row_num ; ++col_num) {
+            ss << "  ";
         }
-    }
 
-    return output;
-}
-
-const string Player::storageRowsToString(){
-    string output = "";
-    for(int i=0; i < ARRAY_DIM; i++){
-        for(int j=0; j<i; j++){
-            output.push_back(Tile::getColourAsChar(storageRows[i][j]));
+        for(int col_num = row_num; col_num >= 0; --col_num) {
+            if(storageRows[row_num][col_num] == nullptr) {
+                ss << ". ";
+            } else {
+                ss << storageRows[row_num][col_num]->getColourAsChar() << " ";
+            }
         }
-    }
-    return output;
-}
 
-const string Player::brokenTilesToString(){
-    string output;
-    for(int i=0; i < BROKEN_TILES_MAX; i++){
-        output.push_back(Tile::getColourAsChar(*brokenTiles[i]));
+        // Prints the mosaic
+        ss << "||";
+        
+        for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
+            if(mosaic[row_num][col_num] != nullptr) {
+                ss << " " << mosaic[row_num][col_num]->getColourAsChar();
+            } else {
+                ss << " " << tilePositions[row_num][col_num];
+            }
+        }
+        
+        ss << "\n";
     }
-    return output;
+
+    ss << "broken: ";
+    for(int i = 0; i < numBrokenTiles; i++) {
+        ss << brokenTiles[i]->getColourAsChar() << " ";
+    }
+
+    return ss.str();
 }

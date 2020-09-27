@@ -6,6 +6,9 @@
 #include "OutputProcessing.h"
 #include <iostream>
 
+#define MAX_PLAYERS 2
+#define NUM_ROUNDS  5
+
 using std::cout;
 using std::cin;
 using std::endl;
@@ -16,8 +19,8 @@ public:
     ~GameEngine();
     void newGame();
     void loadGame();
-    void saveGame();
     void newRound();
+    void newPlayerTurn();
 
     const Gameboard* getGameboard();
 

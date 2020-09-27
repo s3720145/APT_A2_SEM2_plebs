@@ -1,19 +1,25 @@
-#ifndef TILE
-#define TILE
+#ifndef TILE_H
+#define TILE_H
 
-namespace Tile {
-    enum Colour {
-        Red,
-        Yellow,
-        DarkBlue,
-        LightBlue,
-        Black,
-        FirstPlayer,
-        NoTile
-    };
-    const char getColourAsChar(Colour colour);
-
-    const int getColourAsInt(Colour colour);
+enum Colour {
+    DARK_BLUE = 'B',
+    YELLOW = 'Y',
+    RED = 'R',
+    BLACK = 'U',
+    LIGHT_BLUE = 'L',
+    FIRST_PLAYER = 'F',
 };
 
-#endif // TILE
+class Tile {
+public:
+    Tile(char colourAsChar);
+    // no need for move constructor as Tile only contains an enum
+    ~Tile();
+    Colour getColour();
+    char getColourAsChar();
+
+private:
+    Colour colour;
+};
+
+#endif // TILE_H

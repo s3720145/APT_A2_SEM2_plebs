@@ -2,46 +2,46 @@
 #define PLAYER
 
 #include "Tile.h"
-#include "SinglyLinkedList.h"
 #include <string>
 #include <vector>
+#include <sstream>
 
 #define ARRAY_DIM           5
 #define BROKEN_TILES_MAX    7
 
 using std::string;
+using std::stringstream;
 using std::vector;
 
 class Player {
 public:
-    Player(string playerName, int totalScore);
+    Player(string playerName);
     ~Player();
 
-    void initialiseMosaic();
-    void initialiseScoring();
-    bool insertIntoMosaic(const int row_num, const Tile::Colour tile);
-    void initialiseStorageRows();
-    bool insertIntoStorageRow(const int row_num, const Tile::Colour tile);
-    bool insertIntoBrokenTiles(const Tile::Colour tile);
+    void setTilePositions();
+    bool isInMosaicRow(const int row_num, Colour colour);
+    bool cannotInsertIntoStorageRow(int row_num, Colour colour);
+    void insertIntoMosaic(const int row_num, Tile* tile);
+    bool insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles);
+    bool insertIntoBrokenTiles(Tile* tile);
+    vector<Tile*> cleanUp();
+    int calculateScore();
 
-    const string getPlayerName();
+    string getPlayerName();
     const int getTotalScore();
     const int getCurrRoundScore();
 
-    const string mosaicToString();
-    const string storageRowsToString();
-    const string brokenTilesToString();
+    const string playerBoardToString();
 
 private:
     string playerName;
     int totalScore;
     int currRoundScore;
     int numBrokenTiles;
-    Tile::Colour scoring[ARRAY_DIM];
-    Tile::Colour scoringMosaic[ARRAY_DIM][ARRAY_DIM];
-    Tile::Colour mosaic[ARRAY_DIM][ARRAY_DIM];
-    Tile::Colour* storageRows[ARRAY_DIM];
-    Tile::Colour* brokenTiles[BROKEN_TILES_MAX];
+    char tilePositions[ARRAY_DIM][ARRAY_DIM];
+    Tile* mosaic[ARRAY_DIM][ARRAY_DIM];
+    Tile** storageRows[ARRAY_DIM];
+    Tile* brokenTiles[BROKEN_TILES_MAX];
 };
 
 #endif // PLAYER

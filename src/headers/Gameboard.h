@@ -1,12 +1,16 @@
 #ifndef GAMEBOARD
 #define GAMEBOARD
 
-#include "SinglyLinkedList.h"
+#include "GenericLinkedList.h"
 #include "Player.h"
+#include <fstream>
+#include <sstream>
 
-#define MAX_PLAYERS 2
+#define NUM_PER_TILE    20
+#define FACTORY_WIDTH   4
 
 using std::vector;
+using std::stringstream;
 
 class Gameboard {
 
@@ -14,27 +18,33 @@ public:
     Gameboard();
     ~Gameboard();
 
-    void initialiseTileBag();
-    void initialiseFactories();
+    void setTileBag();
+    void setFactories();
+    void insertIntoCentreFactory(Tile* tile);
 
-    void addNewPlayer(string playerName, int score);
-    const Player* getCurrentPlayer();
+    // methods insert tiles from factories to player storage row
+    // if storage_row is 0, insert into broken tiles
+    bool FactoryTilesToPlayer(int factory_row, int storage_row, Colour colour);
+
+    void addNewPlayer(string playerName);
+    Player* getCurrentPlayer();
     void setNextCurrentPlayer();
 
-    const string tileBagToString();
-    const string centreFactoryToString();
+    bool isEndOfRound();
+    void endRound();
+
+    string playerNamesToString();
     const string factoriesToString();
 
 private:
-    SinglyLinkedList* tileBag;
-    SinglyLinkedList* players;
+    GenericLinkedList<Tile*>* tileBag;
+    GenericLinkedList<Player*>* players;
+    vector<string> playerNames;
 
     int centreFactorySize;
-    int numPlayers;
-    vector<Tile::Colour> centreFactory;
-    Tile::Colour factories[ARRAY_DIM][ARRAY_DIM];
+    vector<Tile*> centreFactory;
+    Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
 
-    Player* players[MAX_PLAYERS];
     Player* currentPlayer;
 };
 
