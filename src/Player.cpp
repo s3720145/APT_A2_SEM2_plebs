@@ -51,40 +51,112 @@ bool Player::isInMosaicRow(const int row_num, Colour colour) {
 
 // returns false if we cannot insert even 1 tile
 bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
-    bool cannotInsert = false;
+    bool canInsert = false;
 
-    if(storageRows[row_num][0] != nullptr && storageRows[row_num][0]->getColour() != colour) {
-        cannotInsert = true;
-    } else if(storageRows[row_num][row_num] != nullptr) {
-        cannotInsert = true;
-    } else if(isInMosaicRow(row_num, colour) == true) {
-        cannotInsert = true;
+    if(storageRows[row_num][0] == nullptr || storageRows[row_num][0]->getColour() == colour) {
+        canInsert = true;
+    } else if(isInMosaicRow(row_num, colour) == false) {
+        canInsert = true;
     }
 
-    return cannotInsert;
+    return canInsert;
 }
 
 void Player::insertIntoMosaic(const int row_num, Tile* tile){
+    int conseq_row = 0;
+    int conseq_col = 0;
+    int col_inserted = 0;
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
         if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
             mosaic[row_num][col_num] = tile;
+            col_inserted = col_num;
         }
     }
-
-    // TODO SCORING CODE HERE
+    // scoring for every time you add a tile( consequtive tiles);
+    if(col_inserted != ARRAY_DIM-1){
+        for(int col_num = col_inserted+1; col_num<ARRAY_DIM; col_num++){
+            if(mosaic[row_num][col_num] != nullptr){
+                conseq_row++;
+            }
+            else{
+                //skip the process
+                col_num = ARRAY_DIM;
+            }
+        }
+    }
+    if(col_inserted != 0){
+        for(int col_num = col_inserted-1; col_num> -1; col_num--){
+            if(mosaic[row_num][col_num] != nullptr){
+                conseq_row++;
+            }
+            else{
+                //skip the process
+                col_num = -1;
+            }
+        }
+    }
+    if(row_num != ARRAY_DIM-1){
+        for(int curr_row_num = row_num; curr_row_num<ARRAY_DIM; curr_row_num++){
+            if(mosaic[curr_row_num][col_inserted] != nullptr){
+                conseq_col++;
+            }
+            else{
+                //skip the process
+                curr_row_num = ARRAY_DIM;
+            }
+        }
+    }
+    if(row_num != 0){
+        for(int curr_row_num = row_num; curr_row_num> -1; curr_row_num--){
+            if(mosaic[curr_row_num][col_inserted] != nullptr){
+                conseq_col++;
+            }
+            else{
+                //skip the process
+                curr_row_num = -1;
+            }
+        }
+    }
+    if(conseq_row == 0 && conseq_col == 0){
+        currRoundScore += 1;
+    }
+    else{
+        currRoundScore += conseq_col + conseq_row;
+    }
+    if(numBrokenTiles == 1){
+        currRoundScore -= 1;
+    }
+    else if(numBrokenTiles == 2){
+        currRoundScore -= 2;
+    }
+    else if(numBrokenTiles == 3){
+        currRoundScore -= 4;
+    }
+    else if(numBrokenTiles == 4){
+        currRoundScore -= 6;
+    }
+    else if(numBrokenTiles == 5){
+        currRoundScore -= 8;
+    }
+    else if(numBrokenTiles == 6){
+        currRoundScore -= 11;
+    }
+    else if(numBrokenTiles == 7){
+        currRoundScore -= 14;
+    }
 }
 
-bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
+bool Player::insertIntoStorageRow(const int row_num, Tile* tile) {
     bool insertSuccess = false;
-
-    for(int i = 0; i < num_tiles; ++i) {
+    for(int i = 0; i<row_num; i++){
         if(storageRows[row_num][i] == nullptr && i <= row_num) {
-            storageRows[row_num][i] = tiles[i];
-        } else {
-            insertIntoBrokenTiles(tiles[i]);
+            storageRows[row_num][i] = tile;
+            insertSuccess=true;
+        } 
+        else {
+            insertSuccess = insertIntoBrokenTiles(tile);
         }
     }
-
     return insertSuccess;
 }
 
@@ -94,6 +166,7 @@ bool Player::insertIntoBrokenTiles(Tile* tile){
     if(numBrokenTiles != BROKEN_TILES_MAX) {
         brokenTiles[numBrokenTiles] = tile;
         ++numBrokenTiles;
+        insertSuccess = true;
     }
 
     return insertSuccess;
@@ -126,11 +199,49 @@ vector<Tile*> Player::cleanUp() {
     return returningTiles;
 }
 
-// TODO
-int Player::calculateScore() {
-    int score = 0;
+void Player::calculateTotalScore() {
+    int endGameScore = 0;
+    char tileTypesLowerCase[] = {'b','y','r','u','l'};
+    //row full check
+    for(int row_num = 0; row_num < ARRAY_DIM; row_num++){
+        bool rowCheck = true;
+        for(int col_num = 0; col_num < ARRAY_DIM; col_num++){
+            if(mosaic[row_num][col_num] ==nullptr){
+                rowCheck = false;
+            }
+        }
+        if(rowCheck = true){
+            endGameScore += 2;
+        }
+    }
+    // coloumn full check
+    for(int col_num = 0; col_num < ARRAY_DIM; col_num++){
+        bool colCheck = true;
+        for(int row_num = 0; row_num < ARRAY_DIM; row_num++){
+            if(mosaic[row_num][col_num] ==nullptr){
+                colCheck = false;
+            }
+        }
+        if(colCheck = true){
+            endGameScore += 7;
+        }
+    }
+    // 5(or 6 for enhancment) of each colour check
+    for(char tile : tileTypesLowerCase){
+        int currColourAmount = 0;
+        for(int row_num = 0; row_num<ARRAY_DIM; row_num++){
+            for(int col_num = 0; col_num<ARRAY_DIM; col_num++){
+                if(mosaic[row_num][col_num]->getColourAsChar() == tile){
+                    currColourAmount++;
+                }
+            }
+        }
+        if(currColourAmount == 5){
+            endGameScore += 10;
+        }
+    }
 
-    return score;
+    totalScore = currRoundScore + endGameScore;
 }
 
 string Player::getPlayerName() {
@@ -172,7 +283,7 @@ const string Player::playerBoardToString() {
             if(mosaic[row_num][col_num] != nullptr) {
                 ss << " " << mosaic[row_num][col_num]->getColourAsChar();
             } else {
-                ss << " " << tilePositions[row_num][col_num];
+                ss << " .";
             }
         }
         
