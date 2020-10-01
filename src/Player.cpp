@@ -51,17 +51,15 @@ bool Player::isInMosaicRow(const int row_num, Colour colour) {
 
 // returns false if we cannot insert even 1 tile
 bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
-    bool cannotInsert = false;
+    bool canInsert = false;
 
-    if(storageRows[row_num][0] != nullptr && storageRows[row_num][0]->getColour() != colour) {
-        cannotInsert = true;
-    } else if(storageRows[row_num][row_num] != nullptr) {
-        cannotInsert = true;
-    } else if(isInMosaicRow(row_num, colour) == true) {
-        cannotInsert = true;
+    if(storageRows[row_num][0] == nullptr || storageRows[row_num][0]->getColour() == colour) {
+        canInsert = true;
+    } else if(isInMosaicRow(row_num, colour) == false) {
+        canInsert = true;
     }
 
-    return cannotInsert;
+    return canInsert;
 }
 
 void Player::insertIntoMosaic(const int row_num, Tile* tile){
@@ -74,17 +72,17 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     // TODO SCORING CODE HERE
 }
 
-bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
+bool Player::insertIntoStorageRow(const int row_num, Tile* tile) {
     bool insertSuccess = false;
-
-    for(int i = 0; i < num_tiles; ++i) {
+    for(int i = 0; i<row_num; i++){
         if(storageRows[row_num][i] == nullptr && i <= row_num) {
-            storageRows[row_num][i] = tiles[i];
-        } else {
-            insertIntoBrokenTiles(tiles[i]);
+            storageRows[row_num][i] = tile;
+            insertSuccess=true;
+        } 
+        else {
+            insertSuccess = insertIntoBrokenTiles(tile);
         }
     }
-
     return insertSuccess;
 }
 
@@ -94,6 +92,7 @@ bool Player::insertIntoBrokenTiles(Tile* tile){
     if(numBrokenTiles != BROKEN_TILES_MAX) {
         brokenTiles[numBrokenTiles] = tile;
         ++numBrokenTiles;
+        insertSuccess = true;
     }
 
     return insertSuccess;
@@ -172,7 +171,7 @@ const string Player::playerBoardToString() {
             if(mosaic[row_num][col_num] != nullptr) {
                 ss << " " << mosaic[row_num][col_num]->getColourAsChar();
             } else {
-                ss << " " << tilePositions[row_num][col_num];
+                ss << " .";
             }
         }
         

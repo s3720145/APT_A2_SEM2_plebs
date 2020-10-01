@@ -57,7 +57,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
     vector<Tile*> insertedTiles;
     int numInsertedTiles = 0;
     
-    if(storage_row == 0 || currentPlayer->cannotInsertIntoStorageRow(storage_row - 1, colour) == false) {
+    if(currentPlayer->cannotInsertIntoStorageRow(storage_row - 1, colour) == true) {
         if(factory_row == 0) {
             int counter = 0;
             while(counter < centreFactorySize) {
@@ -67,8 +67,9 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
                     ++numInsertedTiles;
                     --centreFactorySize;
                 } else if(centreFactory[counter]->getColour() == FIRST_PLAYER) {
-                    currentPlayer->insertIntoBrokenTiles(centreFactory[counter]);
+                    insertedTiles.push_back(centreFactory[counter]);
                     centreFactory.erase(centreFactory.begin() + counter);
+                    ++numInsertedTiles;
                     --centreFactorySize;
                 } else {
                     ++counter;
@@ -88,13 +89,33 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
         }
 
         if(numInsertedTiles > 0 && storage_row != 0) {
-            currentPlayer->insertIntoStorageRow(storage_row - 1, numInsertedTiles, insertedTiles);
-            operationSuccess = true;
-        } else {
-            for(Tile* tile : insertedTiles) {
-                currentPlayer->insertIntoBrokenTiles(tile);
+            int counter1 = 0;
+            while(numInsertedTiles > 0) {
+                operationSuccess = currentPlayer->insertIntoStorageRow(storage_row, insertedTiles[counter1]);
+                if(operationSuccess == true){
+                    insertedTiles.erase(insertedTiles.begin() + counter1);
+                    numInsertedTiles--;
+                }
+                else{
+                    tileBag -> addToBack(insertedTiles[counter1]);
+                    numInsertedTiles--;
+                }
+                counter1++;
             }
-            operationSuccess = true;
+        } else {
+            int counter1 = 0;
+            while(numInsertedTiles > 0) {
+                operationSuccess = currentPlayer->insertIntoBrokenTiles(insertedTiles[counter1]);
+                if(operationSuccess == true){
+                    insertedTiles.erase(insertedTiles.begin() + counter1);
+                    numInsertedTiles--;
+                }
+                else{
+                    tileBag -> addToBack(insertedTiles[counter1]);
+                    numInsertedTiles--;
+                }
+                counter1++;
+            }
         }
     }
 
@@ -116,6 +137,7 @@ void Gameboard::setNextCurrentPlayer() {
 }
 
 bool Gameboard::isEndOfRound() {
+    //todo check if all factories are empty.
     return centreFactorySize == 0 ? true : false;
 }
 
