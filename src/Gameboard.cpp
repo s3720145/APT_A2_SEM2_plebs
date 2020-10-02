@@ -15,7 +15,8 @@ Gameboard::Gameboard() {
 }
 
 Gameboard::~Gameboard() {
-    
+    tileBag->~GenericLinkedList();
+    players->~GenericLinkedList();
 }
 
 void Gameboard::setTileBag() {
@@ -143,6 +144,9 @@ void Gameboard::addNewPlayer(string playerName) {
 
 Player* Gameboard::getCurrentPlayer() {
     return this->currentPlayer;
+}
+GenericLinkedList<Player*>* Gameboard::getPlayers(){
+    return players;
 }
 
 void Gameboard::setNextCurrentPlayer() {

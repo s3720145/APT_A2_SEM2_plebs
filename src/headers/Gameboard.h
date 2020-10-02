@@ -29,6 +29,7 @@ public:
 
     void addNewPlayer(string playerName);
     Player* getCurrentPlayer();
+    GenericLinkedList<Player*>* getPlayers();
     void setNextCurrentPlayer();
 
     bool isEndOfRound();

@@ -11,16 +11,19 @@ int main(int argc, char** argv) {
     std::cout << "Welcome to Azul!" << std::endl;
     std::cout << "-------------------" << std::endl;
     
-    try {
-        mainMenu->displayMenu();
-    } catch(...) {
-        mainMenu->~MainMenu();
+    if(argv[1] == "-t") {
+        try{
+            testingMode->readSaveFile(argv[2]);
+        } catch(...) {
+            testingMode->~Test();
+        }
     }
-
-    try{
-        
-    } catch(...) {
-        mainMenu->~MainMenu();
+    else{
+        try {
+            mainMenu->displayMenu();
+        } catch(...) {
+            mainMenu->~MainMenu();
+        }
     }
 
     return EXIT_SUCCESS;
