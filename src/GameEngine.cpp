@@ -3,11 +3,11 @@
 GameEngine::GameEngine() {
     gameboard = new Gameboard();
     inputProcessing = new InputProcessing();
-    outputProcessing = new OutputProcessing();
 }
 
 GameEngine::~GameEngine() {
-
+    gameboard->~Gameboard();
+    inputProcessing->~InputProcessing();
 }
 
 void GameEngine::newGame() {

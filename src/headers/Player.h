@@ -25,6 +25,7 @@ public:
     bool insertIntoStorageRow(const int row_num, Tile* tile);
     bool insertIntoBrokenTiles(Tile* tile);
     vector<Tile*> cleanUp();
+    void calculateBrokenTiles();
     void calculateTotalScore();
 
     string getPlayerName();

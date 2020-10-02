@@ -13,7 +13,6 @@ public:
     void displayMenu();
     void createNewGame();
     void loadSaveGame();
-    void testingMode();
     void printCredits();
     void prompt();
     void quitGame();

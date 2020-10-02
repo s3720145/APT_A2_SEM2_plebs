@@ -1,27 +1,29 @@
-#include "GameEngine.h"
-#include "GenericLinkedList.cpp"
 #include "Test.h"
-
-template class GenericLinkedList<Player*>;
-template class GenericLinkedList<Tile*>;
-template class GenericNode<Player*>;
-template class GenericNode<Tile*>;
+#include <iostream>
 
 Test::Test(){
-    tileBag = new GenericLinkedList<Tile*>();
-    players = new GenericLinkedList<Player*>();
-    loadSaveFile();
+    gameEngine = new GameEngine();
+    readSaveFile();
+}
+Test::~Test(){
+    
 }
 
-Test::readSaveFile(){
+void Test::readSaveFile(){
     readTileBag();
+    readTurn();
 }
 
-Test::readTileBag(){
+void Test::readTileBag(){
     char readIn;
     for(int i = 0; i < tileBagSize; i++){
+        bool checkIn = false;
         std::cin >> readIn;
-        tileBag->addToBack(readIn);
+        checkIn = gameEngine->getGameboard()->addTileBag();
+        if(checkIn = false){
+            std::cout << "Bag Invalid" << std::endl;
+            throw exception();
+        }
     }
 }
 Test::readTurn(){

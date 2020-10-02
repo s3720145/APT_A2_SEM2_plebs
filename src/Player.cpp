@@ -66,6 +66,7 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     int conseq_row = 0;
     int conseq_col = 0;
     int col_inserted = 0;
+    int bothRowCol = 1;
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
         if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
             mosaic[row_num][col_num] = tile;
@@ -117,33 +118,10 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
             }
         }
     }
-    if(conseq_row == 0 && conseq_col == 0){
-        currRoundScore += 1;
+    if(conseq_col != 0 && conseq_row != 0){
+        bothRowCol = 2;
     }
-    else{
-        currRoundScore += conseq_col + conseq_row;
-    }
-    if(numBrokenTiles == 1){
-        currRoundScore -= 1;
-    }
-    else if(numBrokenTiles == 2){
-        currRoundScore -= 2;
-    }
-    else if(numBrokenTiles == 3){
-        currRoundScore -= 4;
-    }
-    else if(numBrokenTiles == 4){
-        currRoundScore -= 6;
-    }
-    else if(numBrokenTiles == 5){
-        currRoundScore -= 8;
-    }
-    else if(numBrokenTiles == 6){
-        currRoundScore -= 11;
-    }
-    else if(numBrokenTiles == 7){
-        currRoundScore -= 14;
-    }
+        currRoundScore += conseq_col + conseq_row + bothRowCol;
 }
 
 bool Player::insertIntoStorageRow(const int row_num, Tile* tile) {
@@ -199,6 +177,32 @@ vector<Tile*> Player::cleanUp() {
     return returningTiles;
 }
 
+void Player::calculateBrokenTiles(){
+    if(numBrokenTiles == 1){
+        currRoundScore -= 1;
+    }
+    else if(numBrokenTiles == 2){
+        currRoundScore -= 2;
+    }
+    else if(numBrokenTiles == 3){
+        currRoundScore -= 4;
+    }
+    else if(numBrokenTiles == 4){
+        currRoundScore -= 6;
+    }
+    else if(numBrokenTiles == 5){
+        currRoundScore -= 8;
+    }
+    else if(numBrokenTiles == 6){
+        currRoundScore -= 11;
+    }
+    else if(numBrokenTiles == 7){
+        currRoundScore -= 14;
+    }
+    if(currRoundScore < 0){
+        currRoundScore = 0;
+    }
+}
 void Player::calculateTotalScore() {
     int endGameScore = 0;
     char tileTypesLowerCase[] = {'b','y','r','u','l'};

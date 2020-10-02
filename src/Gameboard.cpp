@@ -1,6 +1,7 @@
 #include "Gameboard.h"
 #include "GenericLinkedList.cpp"
 #include "GenericNode.cpp"
+#include "InputProcessing.h"
 
 template class GenericLinkedList<Player*>;
 template class GenericLinkedList<Tile*>;
@@ -34,6 +35,19 @@ void Gameboard::setTileBag() {
     }
 
     file.close();
+}
+bool Gameboard::addTileBag(char c){
+    bool output = false;
+    InputProcessing* charCheck= new InputProcessing();
+    if(charCheck->isAColour(c))
+    {
+        tileBag->addToBack(new Tile(c));
+        output = true;
+    }
+    else{
+        output = false;
+    }
+    return output;
 }
 
 void Gameboard::setFactories() {

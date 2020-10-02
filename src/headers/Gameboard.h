@@ -19,6 +19,7 @@ public:
     ~Gameboard();
 
     void setTileBag();
+    bool addTileBag(char c);
     void setFactories();
     void insertIntoCentreFactory(Tile* tile);
 
