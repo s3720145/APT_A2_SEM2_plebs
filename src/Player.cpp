@@ -214,7 +214,7 @@ void Player::calculateTotalScore() {
                 rowCheck = false;
             }
         }
-        if(rowCheck = true){
+        if(rowCheck == true){
             endGameScore += 2;
         }
     }
@@ -226,7 +226,7 @@ void Player::calculateTotalScore() {
                 colCheck = false;
             }
         }
-        if(colCheck = true){
+        if(colCheck == true){
             endGameScore += 7;
         }
     }

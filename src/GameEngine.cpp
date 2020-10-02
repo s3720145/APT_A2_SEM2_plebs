@@ -87,7 +87,7 @@ void GameEngine::newPlayerTurn() {
     gameboard->setNextCurrentPlayer();
 }
 
-const Gameboard* GameEngine::getGameboard() {
-    return this->gameboard;
+Gameboard* GameEngine::getGameboard() {
+    return gameboard;
 }
 

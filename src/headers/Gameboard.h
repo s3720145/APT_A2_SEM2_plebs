@@ -8,6 +8,7 @@
 
 #define NUM_PER_TILE    20
 #define FACTORY_WIDTH   4
+#define playerCount     2
 
 using std::vector;
 using std::stringstream;
@@ -29,7 +30,7 @@ public:
 
     void addNewPlayer(string playerName);
     Player* getCurrentPlayer();
-    GenericLinkedList<Player*>* getPlayers();
+    Player** getPlayers();
     void setNextCurrentPlayer();
 
     bool isEndOfRound();
@@ -40,14 +41,14 @@ public:
 
 private:
     GenericLinkedList<Tile*>* tileBag;
-    GenericLinkedList<Player*>* players;
-    vector<string> playerNames;
+    Player* players[playerCount];
 
     int centreFactorySize;
     vector<Tile*> centreFactory;
     Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
 
-    Player* currentPlayer;
+    int playerAmount;
+    int currentPlayerIter;
 };
 
 #endif // GAMEBOARD

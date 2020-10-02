@@ -22,7 +22,7 @@ public:
     void newRound();
     void newPlayerTurn();
 
-    const Gameboard* getGameboard();
+    Gameboard* getGameboard();
 
 private:
     Gameboard* gameboard;

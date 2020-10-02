@@ -5,7 +5,7 @@ Test::Test(){
     gameEngine = new GameEngine();
 }
 Test::~Test(){
-    
+    gameEngine->~GameEngine();
 }
 
 void Test::readSaveFile(string fileName){
@@ -25,13 +25,13 @@ void Test::readSaveFile(string fileName){
             gameEngine->getGameboard()->addNewPlayer(playerName);
         }
         while(file >> turns){
-            stringbuf s = turns;
+            std::stringbuf s = string(turns);
             cin.rdbuf(&s);
             gameEngine->newRound();
         }
         cout << gameEngine->getGameboard()->factoriesToString() << endl;
-        for(Player* player : gameEngine->getGameboard()->getPlayers()){
-            cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl << endl;
+        for(int i = 0; i < playerAmount; i++){
+            cout << player->playerBoardToString() << endl << endl;
         }
     } else {
         std::cout << "ERROR - CANNOT FIND - src/DefaultTileBag.txt" << std::endl;
@@ -42,18 +42,13 @@ void Test::readSaveFile(string fileName){
     }
 
     file.close();
-    readTileBag();
-    readTurn();
 }
 
 void Test::readTileBag(char c){
     bool checkIn = false;
     checkIn = gameEngine->getGameboard()->addTileBag(c);
-    if(checkIn = false){
+    if(checkIn == false){
         std::cout << "Bag Invalid" << std::endl;
         throw exception();
     }
-}
-void Test::readTurn(){
-    
 }

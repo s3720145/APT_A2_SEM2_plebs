@@ -3,20 +3,17 @@
 #include "GenericNode.cpp"
 #include "InputProcessing.h"
 
-template class GenericLinkedList<Player*>;
 template class GenericLinkedList<Tile*>;
-template class GenericNode<Player*>;
 template class GenericNode<Tile*>;
 
 Gameboard::Gameboard() {
     tileBag = new GenericLinkedList<Tile*>();
-    players = new GenericLinkedList<Player*>();
-    currentPlayer = nullptr;
+    playerAmount=0;
+    currentPlayerIter = 0;
 }
 
 Gameboard::~Gameboard() {
     tileBag->~GenericLinkedList();
-    players->~GenericLinkedList();
 }
 
 void Gameboard::setTileBag() {
@@ -72,7 +69,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
     vector<Tile*> insertedTiles;
     int numInsertedTiles = 0;
     
-    if(currentPlayer->cannotInsertIntoStorageRow(storage_row - 1, colour) == true) {
+    if(players[currentPlayerIter]->cannotInsertIntoStorageRow(storage_row - 1, colour) == true) {
         if(factory_row == 0) {
             int counter = 0;
             while(counter < centreFactorySize) {
@@ -106,7 +103,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
         if(numInsertedTiles > 0 && storage_row != 0) {
             int counter1 = 0;
             while(numInsertedTiles > 0) {
-                operationSuccess = currentPlayer->insertIntoStorageRow(storage_row, insertedTiles[counter1]);
+                operationSuccess = players[currentPlayerIter]->insertIntoStorageRow(storage_row, insertedTiles[counter1]);
                 if(operationSuccess == true){
                     insertedTiles.erase(insertedTiles.begin() + counter1);
                     numInsertedTiles--;
@@ -120,7 +117,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
         } else {
             int counter1 = 0;
             while(numInsertedTiles > 0) {
-                operationSuccess = currentPlayer->insertIntoBrokenTiles(insertedTiles[counter1]);
+                operationSuccess = players[currentPlayerIter]->insertIntoBrokenTiles(insertedTiles[counter1]);
                 if(operationSuccess == true){
                     insertedTiles.erase(insertedTiles.begin() + counter1);
                     numInsertedTiles--;
@@ -138,20 +135,22 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
 }
 
 void Gameboard::addNewPlayer(string playerName) {
-    players->addToBack(new Player(playerName));
-    playerNames.push_back(playerName);
+    players[playerAmount] = new Player(playerName);
+    playerAmount++;
 }
 
 Player* Gameboard::getCurrentPlayer() {
-    return this->currentPlayer;
+    return players[currentPlayerIter];
 }
-GenericLinkedList<Player*>* Gameboard::getPlayers(){
+Player** Gameboard::getPlayers(){
     return players;
 }
 
 void Gameboard::setNextCurrentPlayer() {
-    currentPlayer = players->removeHead();
-    players->addToBack(currentPlayer);
+    currentPlayerIter++;
+    if(currentPlayerIter > playerCount-1){
+        currentPlayerIter = 0;
+    }
 }
 
 bool Gameboard::isEndOfRound() {
@@ -164,22 +163,12 @@ void Gameboard::endRound() {
 
     for(int i = 0; i < 2; ++i) {
         setNextCurrentPlayer();
-        returningTiles = currentPlayer->cleanUp();
+        returningTiles = players[currentPlayerIter]->cleanUp();
         for(Tile* tile : returningTiles) {
             tileBag->addToBack(tile);
         }
     }
     setNextCurrentPlayer();
-}
-
-string Gameboard::playerNamesToString() {
-    stringstream ss;
-
-    for(int i = 0; i < 2; ++i) {
-        ss << playerNames[i] << '\n';
-    }
-
-    return ss.str();
 }
 
 const string Gameboard::factoriesToString() {

@@ -13,7 +13,6 @@ public:
     ~Test();
     void readSaveFile(string fileName);
     void readTileBag(char c);
-    void readTurn();
 private:
     GameEngine* gameEngine;
 };
