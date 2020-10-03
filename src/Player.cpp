@@ -263,7 +263,7 @@ const int Player::getCurrRoundScore() {
 const string Player::playerBoardToString() {
     stringstream ss;
     
-    ss << "Mosaic for " << playerName << ":\n";
+    ss << " Mosaic for " << playerName << ":\n";
 
     for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
         ss << row_num + 1 << ": ";

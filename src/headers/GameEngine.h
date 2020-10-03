@@ -23,6 +23,7 @@ public:
     void newPlayerTurn();
 
     Gameboard* getGameboard();
+    InputProcessing* getInputProcessing();
 
 private:
     Gameboard* gameboard;

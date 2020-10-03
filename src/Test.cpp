@@ -14,24 +14,59 @@ void Test::readSaveFile(string fileName){
     int addedToBag = 0;
     int addedPlayers = 0;
     string turns;
+    bool newRound = true;
+    string buffer;
+    bool fileIsIncorrect = true;
+
+    players = gameEngine->getGameboard()->getPlayers();
     if(file.is_open()) {
-        while(file >> c && tileBagSize>addedToBag) {
+        while(tileBagSize>addedToBag && file >> c ) {
             readTileBag(c);
             addedToBag++;
         }
+        // after reading the tiles the file is still on the first line, therefor i need to move to the second line and use a buffer
+        getline(file, buffer);
         while(addedPlayers < playerAmount){
             string playerName;
             getline(file, playerName);
             gameEngine->getGameboard()->addNewPlayer(playerName);
+            addedPlayers++;
         }
-        while(file >> turns){
-            std::stringbuf s = string(turns);
-            cin.rdbuf(&s);
-            gameEngine->newRound();
+        while (getline(file, turns)){
+            //std::stringbuf string = (std::stringbuf) turns;
+            cout << turns << std::endl;
+            //cin.rdbuf(&string);
+            if(newRound){
+                gameEngine->getGameboard()->setFactories();
+
+                cout << "=== Start Round ===" << endl;
+                newRound = false;
+            }
+            cout << "TURN FOR PLAYER: " << gameEngine->getGameboard()->getCurrentPlayer()->getPlayerName() << endl;
+            cout << "Factories:" << endl;
+            cout << gameEngine->getGameboard()->factoriesToString() << endl;
+            cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
+            fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
+            if(fileIsIncorrect){
+                cout << "file is input incorrectly" << std::endl;
+                file.close();
+            }
+            else{
+                gameEngine->getGameboard()->setNextCurrentPlayer();
+                if(gameEngine->getGameboard()->isEndOfRound()){
+                    newRound = true;
+                    gameEngine->getGameboard()->endRound();
+                    gameEngine->getGameboard()->setNextCurrentPlayer();
+                    cout << "=== END OF ROUND ===" << endl;
+                }
+            }
         }
-        cout << gameEngine->getGameboard()->factoriesToString() << endl;
-        for(int i = 0; i < playerAmount; i++){
-            cout << player->playerBoardToString() << endl << endl;
+        if(fileIsIncorrect == false){
+            cout << gameEngine->getGameboard()->factoriesToString() << endl;
+            for(int i = 0; i < playerAmount; i++){
+                Player* player = players[i];
+                cout << player->playerBoardToString() << endl << endl;
+            }
         }
     } else {
         std::cout << "ERROR - CANNOT FIND - src/DefaultTileBag.txt" << std::endl;

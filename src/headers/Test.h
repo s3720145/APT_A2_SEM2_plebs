@@ -15,6 +15,7 @@ public:
     void readTileBag(char c);
 private:
     GameEngine* gameEngine;
+    Player** players;
 };
 
 #endif // TEST_H

@@ -90,4 +90,7 @@ void GameEngine::newPlayerTurn() {
 Gameboard* GameEngine::getGameboard() {
     return gameboard;
 }
+InputProcessing* GameEngine::getInputProcessing() {
+    return inputProcessing;
+}
 
