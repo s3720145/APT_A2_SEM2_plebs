@@ -53,7 +53,6 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
     } else {
         isValidTurn = false;
     }
-
     return isValidTurn;
 }
 

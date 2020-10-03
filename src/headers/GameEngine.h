@@ -3,7 +3,6 @@
 
 #include "Gameboard.h"
 #include "InputProcessing.h"
-#include "OutputProcessing.h"
 #include <iostream>
 
 #define MAX_PLAYERS 2
@@ -28,7 +27,6 @@ public:
 private:
     Gameboard* gameboard;
     InputProcessing* inputProcessing;
-    OutputProcessing* outputProcessing;
 };
 
 #endif // GAMEENGINE

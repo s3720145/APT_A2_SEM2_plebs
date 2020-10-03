@@ -47,7 +47,7 @@ void Test::readSaveFile(string fileName){
             cout << gameEngine->getGameboard()->factoriesToString() << endl;
             cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
             fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
-            if(fileIsIncorrect){
+            if(fileIsIncorrect == false){
                 cout << "file is input incorrectly" << std::endl;
                 file.close();
             }
@@ -61,7 +61,7 @@ void Test::readSaveFile(string fileName){
                 }
             }
         }
-        if(fileIsIncorrect == false){
+        if(fileIsIncorrect == true){
             cout << gameEngine->getGameboard()->factoriesToString() << endl;
             for(int i = 0; i < playerAmount; i++){
                 Player* player = players[i];
