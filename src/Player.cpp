@@ -261,7 +261,8 @@ void Player::calculateTotalScore() {
         int currColourAmount = ZERO;
         for(int row_num = ZERO; row_num<ARRAY_DIM; row_num++){
             for(int col_num = ZERO; col_num<ARRAY_DIM; col_num++){
-                if(mosaic[row_num][col_num]->getColourAsChar() == tile){
+                if(mosaic[row_num][col_num] != nullptr && 
+                mosaic[row_num][col_num]->getColourAsChar() == tile){
                     currColourAmount++;
                 }
             }
