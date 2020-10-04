@@ -97,7 +97,7 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
         }
     }
     if(row_num != ARRAY_DIM-1){
-        for(int curr_row_num = row_num; curr_row_num<ARRAY_DIM; curr_row_num++){
+        for(int curr_row_num = row_num +1; curr_row_num<ARRAY_DIM; curr_row_num++){
             if(mosaic[curr_row_num][col_inserted] != nullptr){
                 conseq_col++;
             }
@@ -108,7 +108,7 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
         }
     }
     if(row_num != 0){
-        for(int curr_row_num = row_num; curr_row_num> -1; curr_row_num--){
+        for(int curr_row_num = row_num -1; curr_row_num> -1; curr_row_num--){
             if(mosaic[curr_row_num][col_inserted] != nullptr){
                 conseq_col++;
             }

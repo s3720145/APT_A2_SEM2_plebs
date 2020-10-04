@@ -10,23 +10,18 @@ Test::~Test(){
 
 void Test::readSaveFile(string fileName){
     std::ifstream file("src/Savefiles/" + fileName);
-    char c;
-    int addedToBag = 0;
+    string tileBag;
     int addedPlayers = 0;
     string turns;
     bool newRound = true;
-    string buffer;
     bool fileIsIncorrect = true;
 
     players = gameEngine->getGameboard()->getPlayers();
     if(file.is_open()) {
         //todo if tile bag isnt 100
-        while(tileBagSize>addedToBag && file >> c ) {
-            readTileBag(c);
-            addedToBag++;
-        }
+        getline(file, tileBag);
+        readTileBag(tileBag);
         // after reading the tiles the file is still on the first line, therefor i need to move to the second line and use a buffer
-        getline(file, buffer);
         while(addedPlayers < playerAmount){
             string playerName;
             getline(file, playerName);
@@ -80,11 +75,19 @@ void Test::readSaveFile(string fileName){
     file.close();
 }
 
-void Test::readTileBag(char c){
+void Test::readTileBag(string tileBag){
     bool checkIn = false;
-    checkIn = gameEngine->getGameboard()->addTileBag(c);
-    if(checkIn == false){
+    if(tileBag.length()-1 != (long unsigned int)tileBagSize){
         std::cout << "Bag Invalid" << std::endl;
         throw exception();
+    }
+    else{
+        for(long unsigned int i = 0; i<tileBag.length()-1; i++){
+            checkIn = gameEngine->getGameboard()->addTileBag(tileBag[i]);
+            if(checkIn == false){
+                std::cout << "Bag Invalid" << std::endl;
+                throw exception();
+            }
+        }
     }
 }

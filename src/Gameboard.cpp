@@ -170,7 +170,6 @@ void Gameboard::endRound() {
     }
     setNextCurrentPlayer();
 }
-
 const string Gameboard::factoriesToString() {
     stringstream ss;
 

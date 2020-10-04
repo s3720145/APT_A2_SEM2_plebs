@@ -5,6 +5,7 @@
 #include "InputProcessing.h"
 #include <iostream>
 
+#define tileBagSize 100
 #define MAX_PLAYERS 2
 #define NUM_ROUNDS  5
 
@@ -23,6 +24,8 @@ public:
 
     Gameboard* getGameboard();
     InputProcessing* getInputProcessing();
+    void announceWinner();
+    void readTileBag(string tileBag);
 
 private:
     Gameboard* gameboard;
