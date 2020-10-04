@@ -20,6 +20,7 @@ void Test::readSaveFile(string fileName){
 
     players = gameEngine->getGameboard()->getPlayers();
     if(file.is_open()) {
+        //todo if tile bag isnt 100
         while(tileBagSize>addedToBag && file >> c ) {
             readTileBag(c);
             addedToBag++;
@@ -48,7 +49,7 @@ void Test::readSaveFile(string fileName){
             cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
             fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
             if(fileIsIncorrect == false){
-                cout << "file is input incorrectly" << std::endl;
+                cout << "Save File has an incorrect turn" << std::endl;
                 file.close();
             }
             else{
@@ -69,11 +70,11 @@ void Test::readSaveFile(string fileName){
             }
         }
     } else {
-        std::cout << "ERROR - CANNOT FIND - src/DefaultTileBag.txt" << std::endl;
+        std::cout << "ERROR - CANNOT FIND - " << fileName << std::endl;
     }
 
     if(!file.eof() && file.fail()) {
-        std::cout << "ERROR READING - src/DefaultTileBag.txt" << std::endl;
+        std::cout << "ERROR READING - " << fileName << std::endl;
     }
 
     file.close();

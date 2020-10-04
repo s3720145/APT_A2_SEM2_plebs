@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     std::cout << "Welcome to Azul!" << std::endl;
     std::cout << "-------------------" << std::endl;
 
-    if(std::string(argv[1]) == "-t") {
+    if(argc == 3 && std::string(argv[1]) == "-t") {
         try{
             testingMode->readSaveFile(argv[2]);
         } catch(...) {

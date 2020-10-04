@@ -127,8 +127,8 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
 bool Player::insertIntoStorageRow(const int row_num, Tile* tile) {
     bool insertSuccess = false;
     for(int i = 0; i<row_num; i++){
-        if(storageRows[row_num][i] == nullptr && i <= row_num) {
-            storageRows[row_num][i] = tile;
+        if(storageRows[row_num-1][i] == nullptr) {
+            storageRows[row_num-1][i] = tile;
             insertSuccess=true;
         } 
         else {

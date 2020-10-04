@@ -13,7 +13,7 @@ GameEngine::~GameEngine() {
 void GameEngine::newGame() {
     cout << "Starting a New Game" << endl << endl;
 
-    for(int i = 1; i <= MAX_PLAYERS; ++i) {
+    for(int i = 0; i < MAX_PLAYERS; ++i) {
         string playerName;
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
@@ -29,13 +29,80 @@ void GameEngine::newGame() {
     for(int i = 0; i < NUM_ROUNDS; ++i) {
         newRound();
     }
+    
+    //todo winner
 }
 
-// TODO
 void GameEngine::loadGame() {
+    string input;
+    char c;
+    bool newRound = true;
+    int roundPassed = 0;
+    bool roundComplete = true;
     cout << "Enter file name: " << endl;
+    cin >> input;
+    std::ifstream file("src/Savefiles/" + input);
+    if(file.is_open()) {
+        while(tileBagSize>addedToBag && file >> c ) {
+            readTileBag(c);
+            addedToBag++;
+        }
+        getline(file, buffer);
+        string buffer;
+        cout << "Starting a New Game" << endl << endl;
 
+        for(int i = 0; i < MAX_PLAYERS; ++i) {
+            string playerName;
+            cout << "Enter a name for player " << i << endl;
+            cout << "> ";
+            getline(file, playerName);
+            gameboard->addNewPlayer(playerName);
+            cout << endl;
+        }
+        cout << "Let's Play!"<< endl << endl;
+        while (getline(file, turns)){
+            if(newRound){
+                gameEngine->getGameboard()->setFactories();
 
+                cout << "=== Start Round ===" << endl;
+                newRound = false;
+            }
+            cout << "TURN FOR PLAYER: " << gameEngine->getGameboard()->getCurrentPlayer()->getPlayerName() << endl;
+            cout << "Factories:" << endl;
+            cout << gameEngine->getGameboard()->factoriesToString() << endl;
+            cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
+            fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
+            roundComplete = false;
+            // should never happen if save file has been tested and is correct, but just incase.
+            if(fileIsIncorrect == false){
+                cout << "Save File has an incorrect turn" << std::endl;
+                file.close();
+            }
+            else{
+                gameEngine->getGameboard()->setNextCurrentPlayer();
+                if(gameEngine->getGameboard()->isEndOfRound()){
+                    newRound = true;
+                    gameEngine->getGameboard()->endRound();
+                    gameEngine->getGameboard()->setNextCurrentPlayer();
+                    roundPassed++;
+                    roundComplete = true;
+                    cout << "=== END OF ROUND ===" << endl;
+                }
+            }
+        }
+        if(roundComplete == false){
+            newPlayerTurn();
+        }
+        for(int i = roundPassed; i < NUM_ROUNDS; ++i) {
+            newRound();
+        }
+        //todo winner
+    }else {
+        std::cout << "ERROR - CANNOT FIND - " << input << std::endl;
+    }
+    if(!file.eof() && file.fail()) {
+        std::cout << "ERROR READING - " << input << std::endl;
+    }
 }
 
 void GameEngine::newRound() {
@@ -45,7 +112,6 @@ void GameEngine::newRound() {
     // following round.
     
     gameboard->setFactories();
-    gameboard->setNextCurrentPlayer();
 
     cout << "=== Start Round ===" << endl;
 
