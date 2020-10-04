@@ -128,7 +128,6 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     if(conseq_col != 0 && conseq_row != 0){
         bothRowCol = 2;
     }
-        std::cout << conseq_col << std::endl << conseq_row << std::endl << bothRowCol << std::endl;
         currRoundScore += conseq_col + conseq_row + bothRowCol;
 }
 
@@ -288,7 +287,7 @@ void Player::setHasFirstPlayerTile(bool hasFirstPlayerTile) {
 const string Player::playerBoardToString() {
     stringstream ss;
     
-    ss << " Mosaic for " << playerName << ":\n";
+    ss << "Mosaic for " << playerName << ":\n";
 
     for(int row_num = 0; row_num < ARRAY_DIM; ++row_num) {
         ss << row_num + 1 << ": ";

@@ -46,6 +46,7 @@ bool Gameboard::addTileBag(char c){
     else{
         output = false;
     }
+    charCheck->~InputProcessing();
     return output;
 }
 
@@ -168,6 +169,10 @@ void Gameboard::endRound() {
         if(players[i]->getHasFirstPlayerTile() == true) {
             currentPlayerIter = i;
             players[i]->setHasFirstPlayerTile(false);
+            std::cout << (players[i] != getCurrentPlayer()) <<std::endl;
+            if(players[i] != getCurrentPlayer()){
+                setNextCurrentPlayer();
+            }
         }
     }
 }

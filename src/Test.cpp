@@ -9,17 +9,17 @@ Test::~Test(){
 }
 
 void Test::readSaveFile(string fileName){
-    std::ifstream file("src/Savefiles/" + fileName);
+    std::ifstream file("src/Testfiles/" + fileName);
     string tileBag;
     int addedPlayers = 0;
     string turns;
     bool newRound = true;
     bool fileIsIncorrect = true;
-
     players = gameEngine->getGameboard()->getPlayers();
     if(file.is_open()) {
         //todo if tile bag isnt 100
         getline(file, tileBag);
+        cout << (int)tileBag.length();
         readTileBag(tileBag);
         // after reading the tiles the file is still on the first line, therefor i need to move to the second line and use a buffer
         while(addedPlayers < playerAmount){
@@ -30,7 +30,7 @@ void Test::readSaveFile(string fileName){
         }
         while (getline(file, turns)){
             //std::stringbuf string = (std::stringbuf) turns;
-            cout << turns << std::endl;
+            cout << turns << endl;
             //cin.rdbuf(&string);
             if(newRound){
                 gameEngine->getGameboard()->setFactories();
@@ -44,7 +44,7 @@ void Test::readSaveFile(string fileName){
             cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
             fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
             if(fileIsIncorrect == false){
-                cout << "Save File has an incorrect turn" << std::endl;
+                cout << "Save File has an incorrect turn" << endl;
                 file.close();
             }
             else{
@@ -52,12 +52,12 @@ void Test::readSaveFile(string fileName){
                 if(gameEngine->getGameboard()->isEndOfRound()){
                     newRound = true;
                     gameEngine->getGameboard()->endRound();
-                    gameEngine->getGameboard()->setNextCurrentPlayer();
                     cout << "=== END OF ROUND ===" << endl;
                 }
             }
         }
         if(fileIsIncorrect == true){
+            cout << "State of Game:" << endl;
             cout << gameEngine->getGameboard()->factoriesToString() << endl;
             for(int i = 0; i < playerAmount; i++){
                 Player* player = players[i];
@@ -65,11 +65,11 @@ void Test::readSaveFile(string fileName){
             }
         }
     } else {
-        std::cout << "ERROR - CANNOT FIND - " << fileName << std::endl;
+        cout << "ERROR - CANNOT FIND - " << fileName << endl;
     }
 
     if(!file.eof() && file.fail()) {
-        std::cout << "ERROR READING - " << fileName << std::endl;
+        cout << "ERROR READING - " << fileName << endl;
     }
 
     file.close();
@@ -77,15 +77,16 @@ void Test::readSaveFile(string fileName){
 
 void Test::readTileBag(string tileBag){
     bool checkIn = false;
-    if(tileBag.length()-1 != (long unsigned int)tileBagSize){
-        std::cout << "Bag Invalid" << std::endl;
+    if((int)tileBag.length()-1 != tileBagSize){
+        cout << "Bag Invalid" << endl;
         throw exception();
     }
     else{
-        for(long unsigned int i = 0; i<tileBag.length()-1; i++){
+        for(int i = 0; i<(int) tileBag.length()-1; i++){
+            cout << tileBag[i];
             checkIn = gameEngine->getGameboard()->addTileBag(tileBag[i]);
             if(checkIn == false){
-                std::cout << "Bag Invalid" << std::endl;
+                cout << "Bag Invalid" << endl;
                 throw exception();
             }
         }

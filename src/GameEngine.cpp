@@ -81,7 +81,6 @@ void GameEngine::loadGame() {
                 if(gameboard->isEndOfRound()){
                     isNewRound = true;
                     gameboard->endRound();
-                    gameboard->setNextCurrentPlayer();
                     roundPassed++;
                     roundComplete = true;
                     cout << "=== END OF ROUND ===" << endl;
