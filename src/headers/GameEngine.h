@@ -27,6 +27,7 @@ public:
 private:
     Gameboard* gameboard;
     InputProcessing* inputProcessing;
+    string tileBagOrder;
 };
 
 #endif // GAMEENGINE

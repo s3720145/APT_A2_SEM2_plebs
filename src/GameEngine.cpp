@@ -33,9 +33,7 @@ void GameEngine::newGame() {
 
 // TODO
 void GameEngine::loadGame() {
-    cout << "Enter file name: " << endl;
-
-
+    
 }
 
 void GameEngine::newRound() {
@@ -45,7 +43,6 @@ void GameEngine::newRound() {
     // following round.
     
     gameboard->setFactories();
-    gameboard->setNextCurrentPlayer();
 
     cout << "=== Start Round ===" << endl;
 
@@ -53,9 +50,17 @@ void GameEngine::newRound() {
         newPlayerTurn();
     }
 
+    cout << "=== END OF ROUND ===" << endl;
+
     gameboard->endRound();
 
-    cout << "=== END OF ROUND ===" << endl;
+    Player** players = gameboard->getPlayers();
+
+    for(int i = 0; i < playerCount; ++i) {
+        cout << players[i]->playerBoardToString() << endl;
+        cout << "Current round score: " << players[i]->getCurrRoundScore() << endl << endl;
+    }
+    
 }
 
 void GameEngine::newPlayerTurn() {
@@ -77,8 +82,10 @@ void GameEngine::newPlayerTurn() {
 
         try {
             successfulTurn = inputProcessing->processPlayerInput(playerInput, gameboard);
-        } catch(...) {
-            // cout << "Turn unsuccessful" << endl;
+        } catch(...) {}
+
+        if(successfulTurn == false) {
+            cout << "Turn unsuccessful, Please try again!" << endl;
         }
 
         cin.clear();

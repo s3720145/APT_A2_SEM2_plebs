@@ -32,7 +32,9 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
         }
     } else if(numTokens == 2) {
         if(tokens[0] == "save") {
-            saveGame(tokens[2], gameboard);
+            saveGame(tokens[1], gameboard);
+            std::cout << "Game sucessfully saved to - " << tokens[1] << std::endl;
+            isValidTurn = false;
         } else {
             isValidTurn = false;
         }
@@ -40,38 +42,59 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
         int factory_row = std::stoi(tokens[1]);
         int storage_row = std::stoi(tokens[3]);
 
-        if((factory_row >= 0 && factory_row <= 5) && (storage_row >= 1 && storage_row <= 5) && isAColour(*tokens[2].c_str())) {
-            isValidTurn = gameboard->FactoryTilesToPlayer(factory_row, storage_row, static_cast<Colour>(*tokens[2].c_str()));
-        } else {
+        if(factory_row == 0 && gameboard->getIsFirstTurn() == true) {
+            std::cout << "Invalid move - Cannot take from factory 0 in first turn" << std::endl;
             isValidTurn = false;
+        } else {
+            if((factory_row >= 0 && factory_row <= 5) && (storage_row >= 1 && storage_row <= 5) && isAColour(*tokens[2].c_str())) {
+                isValidTurn = gameboard->FactoryTilesToPlayer(factory_row, storage_row, static_cast<Colour>(*tokens[2].c_str()));
+            } else {
+                isValidTurn = false;
+            }
+
+            if(isValidTurn == true) {
+                if(gameboard->getIsFirstTurn() == true) {
+                    gameboard->setIsFirstTurn(false);
+                }
+                validTurns.push_back(playerInput);
+                ++numValidTurns;
+            }
         }
 
-        if(isValidTurn == true) {
-            validTurns.push_back(playerInput);
-            ++numValidTurns;
-        }
     } else {
         isValidTurn = false;
     }
+
     return isValidTurn;
 }
 
 // TODO
 void InputProcessing::saveGame(string fileName, Gameboard* gameboard) {
     std::ofstream saveFile("src/saveFiles/" + fileName);
-    std::ifstream tileBag("src/DefaultTileBag.txt");
     string content;
 
-    // getline(tileBag, content);
-    // content.erase(content.end() - 1);
-    // saveFile << content << '\n';
+    if(saveFile.fail()) {
+        std::cout << "file not found" << std::endl;
+    } else {
+        std::ifstream file("src/DefaultTileBag.txt");
+        string defaultTileBag;
 
-    // content = gameboard->playerNamesToString();
-    // saveFile << content;
+        getline(file, defaultTileBag);
 
-    // for(int i = 0; i < numValidTurns; ++i) {
-    //     saveFile << validTurns[numValidTurns] << '\n';
-    // }
+        saveFile << defaultTileBag << '\n';
+
+        content = gameboard->playerNamesToString();
+
+        saveFile << content;
+
+        for(int i = 0; i < numValidTurns; ++i) {
+            saveFile << validTurns[i] << '\n';
+        }
+
+        file.close();
+    }
+
+    saveFile.close();
 }
 
 bool InputProcessing::isAColour(char c) {

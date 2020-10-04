@@ -36,6 +36,9 @@ public:
     bool isEndOfRound();
     void endRound();
 
+    bool getIsFirstTurn();
+    void setIsFirstTurn(bool isFirstTurn);
+
     string playerNamesToString();
     const string factoriesToString();
 
@@ -49,6 +52,8 @@ private:
 
     int playerAmount;
     int currentPlayerIter;
+
+    bool isFirstTurn;
 };
 
 #endif // GAMEBOARD

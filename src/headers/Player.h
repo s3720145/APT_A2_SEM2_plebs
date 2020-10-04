@@ -22,7 +22,7 @@ public:
     bool isInMosaicRow(const int row_num, Colour colour);
     bool cannotInsertIntoStorageRow(int row_num, Colour colour);
     void insertIntoMosaic(const int row_num, Tile* tile);
-    bool insertIntoStorageRow(const int row_num, Tile* tile);
+    bool insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles);
     bool insertIntoBrokenTiles(Tile* tile);
     vector<Tile*> cleanUp();
     void calculateBrokenTiles();
@@ -31,6 +31,9 @@ public:
     string getPlayerName();
     const int getTotalScore();
     const int getCurrRoundScore();
+
+    bool getHasFirstPlayerTile();
+    void setHasFirstPlayerTile(bool hasFirstPlayerTile);
 
     const string playerBoardToString();
 
@@ -43,6 +46,7 @@ private:
     Tile* mosaic[ARRAY_DIM][ARRAY_DIM];
     Tile** storageRows[ARRAY_DIM];
     Tile* brokenTiles[BROKEN_TILES_MAX];
+    bool hasFirstPlayerTile;
 };
 
 #endif // PLAYER
