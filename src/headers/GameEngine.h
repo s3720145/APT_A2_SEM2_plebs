@@ -3,9 +3,9 @@
 
 #include "Gameboard.h"
 #include "InputProcessing.h"
-#include "OutputProcessing.h"
 #include <iostream>
 
+#define tileBagSize 100
 #define MAX_PLAYERS 2
 #define NUM_ROUNDS  5
 
@@ -17,17 +17,30 @@ class GameEngine {
 public:
     GameEngine();
     ~GameEngine();
+
+    // starts a new game composing of 5 rounds
     void newGame();
+
+    // loads a game state from a save file
     void loadGame();
+
+    // starts a new round
     void newRound();
+
+    // process the current players turn
     void newPlayerTurn();
 
-    const Gameboard* getGameboard();
+    Gameboard* getGameboard();
+    InputProcessing* getInputProcessing();
+
+    // prints end of game scores and prints the winner
+    void announceWinner();
+    void readTileBag(string tileBag);
 
 private:
     Gameboard* gameboard;
     InputProcessing* inputProcessing;
-    OutputProcessing* outputProcessing;
+    string tileBagOrder;
 };
 
 #endif // GAMEENGINE

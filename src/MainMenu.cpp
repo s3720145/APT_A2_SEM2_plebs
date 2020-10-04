@@ -50,10 +50,6 @@ void MainMenu::loadSaveGame() {
     gameEngine->loadGame();
 }
 
-void MainMenu::testingMode() {
-
-}
-
 void MainMenu::printCredits() {
     std::cout << std::endl;
     std::cout << "----------------------------------" << std::endl;
@@ -74,6 +70,7 @@ void MainMenu::printCredits() {
 }
 
 void MainMenu::quitGame() {
+    gameEngine->~GameEngine();
     std::cout << "Goodbye" << std::endl;
     throw exception();
 }

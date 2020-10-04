@@ -1,13 +1,21 @@
 #ifndef TEST_H
 #define TEST_H
+#include "GameEngine.h"
 
-#define tileBagSize    120
+#define tileBagSize    100
+#define playerAmount   2
 
-class test {
+using std::exception;
+
+class Test{
 public:
     Test();
-    readSaveFile();
-    readTileBag();
+    ~Test();
+    void readSaveFile(string fileName);
+    void readTileBag(string tileBag);
 private:
+    GameEngine* gameEngine;
+    Player** players;
 };
+
 #endif // TEST_H
