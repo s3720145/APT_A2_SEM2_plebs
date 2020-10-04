@@ -5,6 +5,7 @@ Player::Player(string playerName) {
     this->playerName = playerName;
     totalScore = 0;
     numBrokenTiles = 0;
+    hasFirstPlayerTile = false;
 
     setTilePositions();
 
@@ -37,6 +38,7 @@ void Player::setTilePositions() {
     }
 }
 
+// Checks if the tile is already placed in the desired mosaic row
 bool Player::isInMosaicRow(const int row_num, Colour colour) {
     bool inMosaic = false;
 
@@ -49,28 +51,32 @@ bool Player::isInMosaicRow(const int row_num, Colour colour) {
     return inMosaic;
 }
 
-// returns false if we cannot insert even 1 tile
+// returns false if we cannot insert even 1 tile into storage row
 bool Player::cannotInsertIntoStorageRow(int row_num, Colour colour) {
-    bool canInsert = false;
+    bool cannotInsert = false;
 
-    if(storageRows[row_num][0] == nullptr || storageRows[row_num][0]->getColour() == colour) {
-        canInsert = true;
-    } else if(isInMosaicRow(row_num, colour) == false) {
-        canInsert = true;
+    if(storageRows[row_num][0] != nullptr && storageRows[row_num][0]->getColour() != colour) {
+        cannotInsert = true;
+    } else if(storageRows[row_num][row_num] != nullptr) {
+        cannotInsert = true;
+    } else if(isInMosaicRow(row_num, colour) == true) {
+        cannotInsert = true;
     }
 
-    return canInsert;
+    return cannotInsert;
 }
 
 void Player::insertIntoMosaic(const int row_num, Tile* tile){
     int conseq_row = 0;
     int conseq_col = 0;
     int col_inserted = 0;
+    int insertedTile = 0;
     int bothRowCol = 1;
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
         if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
             mosaic[row_num][col_num] = tile;
             col_inserted = col_num;
+            ++insertedTile;
         }
     }
     // scoring for every time you add a tile( consequtive tiles);
@@ -97,7 +103,8 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
         }
     }
     if(row_num != ARRAY_DIM-1){
-        for(int curr_row_num = row_num +1; curr_row_num<ARRAY_DIM; curr_row_num++){
+
+        for(int curr_row_num = row_num + 1; curr_row_num<ARRAY_DIM; curr_row_num++){
             if(mosaic[curr_row_num][col_inserted] != nullptr){
                 conseq_col++;
             }
@@ -108,7 +115,7 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
         }
     }
     if(row_num != 0){
-        for(int curr_row_num = row_num -1; curr_row_num> -1; curr_row_num--){
+        for(int curr_row_num = row_num - 1; curr_row_num> -1; curr_row_num--){
             if(mosaic[curr_row_num][col_inserted] != nullptr){
                 conseq_col++;
             }
@@ -121,20 +128,29 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     if(conseq_col != 0 && conseq_row != 0){
         bothRowCol = 2;
     }
+        std::cout << conseq_col << std::endl << conseq_row << std::endl << bothRowCol << std::endl;
         currRoundScore += conseq_col + conseq_row + bothRowCol;
 }
 
-bool Player::insertIntoStorageRow(const int row_num, Tile* tile) {
+bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
     bool insertSuccess = false;
-    for(int i = 0; i<row_num; i++){
-        if(storageRows[row_num-1][i] == nullptr) {
-            storageRows[row_num-1][i] = tile;
-            insertSuccess=true;
-        } 
-        else {
-            insertSuccess = insertIntoBrokenTiles(tile);
+
+    // for each tile being inserted
+    for(int i = 0; i < num_tiles; ++i) {
+        bool isTileInserted = false;
+        // find a free spot in storage row (should at least be 1 free spot)
+        for(int col_num = 0; col_num <= row_num && isTileInserted == false; ++col_num) {
+            if(storageRows[row_num][col_num] == nullptr) {
+                storageRows[row_num][col_num] = tiles[i];
+                isTileInserted = true;
+            }
+        }
+
+        if(isTileInserted == false) {
+            insertIntoBrokenTiles(tiles[i]);
         }
     }
+
     return insertSuccess;
 }
 
@@ -144,7 +160,6 @@ bool Player::insertIntoBrokenTiles(Tile* tile){
     if(numBrokenTiles != BROKEN_TILES_MAX) {
         brokenTiles[numBrokenTiles] = tile;
         ++numBrokenTiles;
-        insertSuccess = true;
     }
 
     return insertSuccess;
@@ -167,6 +182,8 @@ vector<Tile*> Player::cleanUp() {
             }
         }
     }
+
+    calculateBrokenTiles();
 
     for(int i = 0; i < numBrokenTiles; i++){
         returningTiles.push_back(brokenTiles[i]);
@@ -258,6 +275,14 @@ const int Player::getTotalScore() {
 
 const int Player::getCurrRoundScore() {
     return currRoundScore;
+}
+
+bool Player::getHasFirstPlayerTile() {
+    return hasFirstPlayerTile;
+}
+
+void Player::setHasFirstPlayerTile(bool hasFirstPlayerTile) {
+    this->hasFirstPlayerTile = hasFirstPlayerTile;
 }
 
 const string Player::playerBoardToString() {

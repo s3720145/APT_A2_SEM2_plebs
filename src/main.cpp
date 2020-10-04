@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "Test.h"
 #include <iostream>
+#include <string>
 
 #define EXIT_SUCCESS 0
 
