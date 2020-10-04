@@ -1,6 +1,6 @@
 UYRUBBBUURLLBRYRUBYUYLRRYUYUYRYLLYRBRRYLLRUURLLLBYLBRBYUBLYURLBUYBLLBRYBYLUYBRYULRBURULLRUBUUBLBYBYR
-a
-a
+A
+B
 turn 1 U 2
 turn 2 B 3
 turn 3 R 1
@@ -21,4 +21,19 @@ turn 0 Y 4
 turn 3 L 4
 turn 2 Y 4
 turn 0 B 5
-turn 0 U 3turn
+turn 0 U 3
+turn 0 R b
+turn 0 Y b
+turn 2 L 4
+turn 1 U 3
+turn 5 U 3
+turn 3 B 2
+turn 4 Y 1
+turn 0 B 5
+turn 0 Y 2
+turn 0 L 4
+turn 0 R 5
+turn 0 U 3
+turn 5 B 5
+turn 4 Y 3
+turn 2 B 1

@@ -40,13 +40,19 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
         }
     } else if(tokens[0] == "turn") {
         int factory_row = std::stoi(tokens[1]);
-        int storage_row = std::stoi(tokens[3]);
+        int storage_row = 0;
+
+        if(tokens[3] == "b") {
+            storage_row = 0;
+        } else {
+            storage_row = std::stoi(tokens[3]);
+        }
 
         if(factory_row == 0 && gameboard->getIsFirstTurn() == true) {
             std::cout << "Invalid move - Cannot take from factory 0 in first turn" << std::endl;
             isValidTurn = false;
         } else {
-            if((factory_row >= 0 && factory_row <= 5) && (storage_row >= 1 && storage_row <= 5) && isAColour(*tokens[2].c_str())) {
+            if((factory_row >= 0 && factory_row <= 5) && (storage_row >= 0 && storage_row <= 5) && isAColour(*tokens[2].c_str())) {
                 isValidTurn = gameboard->FactoryTilesToPlayer(factory_row, storage_row, static_cast<Colour>(*tokens[2].c_str()));
             } else {
                 isValidTurn = false;

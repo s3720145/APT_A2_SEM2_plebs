@@ -69,7 +69,7 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
     bool operationSuccess = false;
     vector<Tile*> insertedTiles;
     int numInsertedTiles = 0;
-    
+
     if(storage_row == 0 || players[currentPlayerIter]->cannotInsertIntoStorageRow(storage_row - 1, colour) == false) {
         if(factory_row == 0) {
             int counter = 0;
@@ -102,16 +102,17 @@ bool Gameboard::FactoryTilesToPlayer(int factory_row, int storage_row, Colour co
         }
 
         // if the number of tiles being inserted is larger than 0
-        if(numInsertedTiles > 0) {
+        if(numInsertedTiles > 0 && storage_row != 0) {
             players[currentPlayerIter]->insertIntoStorageRow(storage_row - 1, numInsertedTiles, insertedTiles);
             operationSuccess = true;
-        } 
-        // else {
-        //     for(Tile* tile : insertedTiles) {
-        //         players[currentPlayerIter]->insertIntoBrokenTiles(tile);
-        //     }
-        //     operationSuccess = true;
-        // }
+        } else if(numInsertedTiles > 0 && storage_row == 0) {
+            for(Tile* tile : insertedTiles) {
+                if(players[currentPlayerIter]->insertIntoBrokenTiles(tile) == false) {
+                    tileBag->addToBack(tile);
+                }
+            }
+            operationSuccess = true;
+        }
     }
 
     return operationSuccess;
@@ -170,6 +171,8 @@ void Gameboard::endRound() {
             players[i]->setHasFirstPlayerTile(false);
         }
     }
+
+    isFirstTurn = true;
 }
 
 bool Gameboard::getIsFirstTurn() {

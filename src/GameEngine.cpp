@@ -13,7 +13,7 @@ GameEngine::~GameEngine() {
 void GameEngine::newGame() {
     cout << "Starting a New Game" << endl << endl;
 
-    for(int i = 0; i < MAX_PLAYERS; ++i) {
+    for(int i = 1; i <= MAX_PLAYERS; ++i) {
         string playerName;
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
@@ -171,6 +171,7 @@ void GameEngine::announceWinner() {
     cout << "Final Scores:" << endl;
     for(int i = 0; i < MAX_PLAYERS; i++){
         Player* player = players[i];
+        cout << player->getPlayerName() << endl;
         player->calculateTotalScore();
         if(player->getTotalScore() > winnerScore){
             playerWinner = player;

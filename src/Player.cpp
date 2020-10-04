@@ -70,13 +70,12 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     int conseq_row = 0;
     int conseq_col = 0;
     int col_inserted = 0;
-    int insertedTile = 0;
     int bothRowCol = 1;
+
     for(int col_num = 0; col_num < ARRAY_DIM; ++col_num) {
         if(tilePositions[row_num][col_num] == tolower(tile->getColourAsChar())) {
             mosaic[row_num][col_num] = tile;
             col_inserted = col_num;
-            ++insertedTile;
         }
     }
     // scoring for every time you add a tile( consequtive tiles);
@@ -128,8 +127,8 @@ void Player::insertIntoMosaic(const int row_num, Tile* tile){
     if(conseq_col != 0 && conseq_row != 0){
         bothRowCol = 2;
     }
-        std::cout << conseq_col << std::endl << conseq_row << std::endl << bothRowCol << std::endl;
-        currRoundScore += conseq_col + conseq_row + bothRowCol;
+    
+    currRoundScore += conseq_col + conseq_row + bothRowCol;
 }
 
 bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*> tiles) {
@@ -148,6 +147,10 @@ bool Player::insertIntoStorageRow(const int row_num, int num_tiles, vector<Tile*
 
         if(isTileInserted == false) {
             insertIntoBrokenTiles(tiles[i]);
+
+            // if(insertIntoBrokenTiles(tiles[i]) == false) {
+            //     tileBag->addToBack(tiles[i]);
+            // }
         }
     }
 
@@ -160,6 +163,7 @@ bool Player::insertIntoBrokenTiles(Tile* tile){
     if(numBrokenTiles != BROKEN_TILES_MAX) {
         brokenTiles[numBrokenTiles] = tile;
         ++numBrokenTiles;
+        insertSuccess = true;
     }
 
     return insertSuccess;
@@ -223,6 +227,7 @@ void Player::calculateBrokenTiles(){
 void Player::calculateTotalScore() {
     int endGameScore = 0;
     char tileTypesLowerCase[] = {'b','y','r','u','l'};
+    
     //row full check
     for(int row_num = 0; row_num < ARRAY_DIM; row_num++){
         bool rowCheck = true;
@@ -235,6 +240,7 @@ void Player::calculateTotalScore() {
             endGameScore += 2;
         }
     }
+
     // coloumn full check
     for(int col_num = 0; col_num < ARRAY_DIM; col_num++){
         bool colCheck = true;
@@ -247,12 +253,13 @@ void Player::calculateTotalScore() {
             endGameScore += 7;
         }
     }
+    
     // 5(or 6 for enhancment) of each colour check
     for(char tile : tileTypesLowerCase){
         int currColourAmount = 0;
         for(int row_num = 0; row_num<ARRAY_DIM; row_num++){
             for(int col_num = 0; col_num<ARRAY_DIM; col_num++){
-                if(mosaic[row_num][col_num]->getColourAsChar() == tile){
+                if(mosaic[row_num][col_num] != nullptr && mosaic[row_num][col_num]->getColourAsChar() == tile){
                     currColourAmount++;
                 }
             }
@@ -261,7 +268,7 @@ void Player::calculateTotalScore() {
             endGameScore += 10;
         }
     }
-
+    
     totalScore = currRoundScore + endGameScore;
 }
 
