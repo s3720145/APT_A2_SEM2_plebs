@@ -13,7 +13,7 @@ GameEngine::~GameEngine() {
 void GameEngine::newGame() {
     cout << "Starting a New Game" << endl << endl;
 
-    for(int i = 0; i < MAX_PLAYERS; ++i) {
+    for(int i = ZERO; i < MAX_PLAYERS; ++i) {
         string playerName;
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
@@ -26,7 +26,7 @@ void GameEngine::newGame() {
 
     gameboard->setTileBag();
 
-    for(int i = 0; i < NUM_ROUNDS; ++i) {
+    for(int i = ZERO; i < NUM_ROUNDS; ++i) {
         newRound();
     }
     
@@ -37,7 +37,7 @@ void GameEngine::loadGame() {
     string input;
     string tileBag;
     bool isNewRound = true;
-    int roundPassed = 0;
+    int roundPassed = ZERO;
     bool roundComplete = true;
     bool fileIsIncorrect = true;
     string turns;
@@ -49,7 +49,7 @@ void GameEngine::loadGame() {
         readTileBag(tileBag);
         cout << "Starting a New Game" << endl << endl;
 
-        for(int i = 0; i < MAX_PLAYERS; ++i) {
+        for(int i = ZERO; i < MAX_PLAYERS; ++i) {
             string playerName;
             cout << "Enter a name for player " << i << endl;
             cout << "> ";
@@ -65,11 +65,14 @@ void GameEngine::loadGame() {
                 cout << "=== Start Round ===" << endl;
                 isNewRound = false;
             }
-            cout << "TURN FOR PLAYER: " << gameboard->getCurrentPlayer()->getPlayerName() << endl;
+            cout << "TURN FOR PLAYER: " << 
+            gameboard->getCurrentPlayer()->getPlayerName() << endl;
             cout << "Factories:" << endl;
             cout << gameboard->factoriesToString() << endl;
-            cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl << endl;
-            fileIsIncorrect = inputProcessing->processPlayerInput(turns, gameboard);
+            cout << gameboard->getCurrentPlayer()->playerBoardToString() <<
+             endl << endl;
+            fileIsIncorrect = inputProcessing->processPlayerInput(
+                turns, gameboard);
             roundComplete = false;
             // should never happen if save file has been tested and is correct, but just incase.
             if(fileIsIncorrect == false){
@@ -122,9 +125,10 @@ void GameEngine::newRound() {
 
     Player** players = gameboard->getPlayers();
 
-    for(int i = 0; i < playerCount; ++i) {
+    for(int i = ZERO; i < playerCount; ++i) {
         cout << players[i]->playerBoardToString() << endl;
-        cout << "Current round score: " << players[i]->getCurrRoundScore() << endl << endl;
+        cout << "Current round score: " << players[i]->getCurrRoundScore() <<
+         endl << endl;
     }
     
 }
@@ -133,10 +137,12 @@ void GameEngine::newPlayerTurn() {
     string playerInput;
     bool successfulTurn = false;
 
-    cout << "TURN FOR PLAYER: " << gameboard->getCurrentPlayer()->getPlayerName() << endl;
+    cout << "TURN FOR PLAYER: " << 
+    gameboard->getCurrentPlayer()->getPlayerName() << endl;
     cout << "Factories:" << endl;
     cout << gameboard->factoriesToString() << endl;
-    cout << gameboard->getCurrentPlayer()->playerBoardToString() << endl << endl;
+    cout << gameboard->getCurrentPlayer()->playerBoardToString() <<
+     endl << endl;
 
     do {
         cout << "> ";
@@ -147,7 +153,8 @@ void GameEngine::newPlayerTurn() {
         }
 
         try {
-            successfulTurn = inputProcessing->processPlayerInput(playerInput, gameboard);
+            successfulTurn = inputProcessing->processPlayerInput(
+                playerInput, gameboard);
           
         } catch(...) {
             cout << "Turn unsuccessful, Please try again!" << endl;
@@ -163,12 +170,12 @@ void GameEngine::newPlayerTurn() {
 }
 void GameEngine::announceWinner() {
     bool tie = false;
-    int winnerScore = 0;
+    int winnerScore = ZERO;
     Player* playerWinner = nullptr;
     Player** players = gameboard->getPlayers();
     cout << "=== GAME OVER ===" << endl << endl;
     cout << "Final Scores:" << endl;
-    for(int i = 0; i < MAX_PLAYERS; i++){
+    for(int i = ZERO; i < MAX_PLAYERS; i++){
         Player* player = players[i];
         player->calculateTotalScore();
         if(player->getTotalScore() > winnerScore){
@@ -178,7 +185,8 @@ void GameEngine::announceWinner() {
         else if(player->getTotalScore() == winnerScore){
             tie = true;
         }
-        cout << "Player " << player->getPlayerName() << ": " << player->getTotalScore() << endl;
+        cout << "Player " << player->getPlayerName() << ": " << 
+        player->getTotalScore() << endl;
     }
     if(tie){
         cout << "Players have tied" << endl;
@@ -189,12 +197,12 @@ void GameEngine::announceWinner() {
 }
 void GameEngine::readTileBag(string tileBag){
     bool checkIn = false;
-    if(tileBag.length()-1 != tileBagSize){
+    if(tileBag.length()-ONE != tileBagSize){
         std::cout << "Bag Invalid" << std::endl;
         throw std::exception();
     }
     else{
-        for(long unsigned int i = 0; i<tileBag.length()-1; i++){
+        for(long unsigned int i = ZERO; i<tileBag.length()-ONE; i++){
             checkIn = gameboard->addTileBag(tileBag[i]);
             if(checkIn == false){
                 std::cout << "Bag Invalid" << std::endl;

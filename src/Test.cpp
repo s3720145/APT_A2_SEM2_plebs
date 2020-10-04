@@ -11,7 +11,7 @@ Test::~Test(){
 void Test::readSaveFile(string fileName){
     std::ifstream file("src/Testfiles/" + fileName);
     string tileBag;
-    int addedPlayers = 0;
+    int addedPlayers = ZERO;
     string turns;
     bool newRound = true;
     bool fileIsIncorrect = true;
@@ -38,11 +38,15 @@ void Test::readSaveFile(string fileName){
                 cout << "=== Start Round ===" << endl;
                 newRound = false;
             }
-            cout << "TURN FOR PLAYER: " << gameEngine->getGameboard()->getCurrentPlayer()->getPlayerName() << endl;
+            cout << "TURN FOR PLAYER: " << gameEngine->getGameboard()->
+            getCurrentPlayer()->getPlayerName() << endl;
             cout << "Factories:" << endl;
             cout << gameEngine->getGameboard()->factoriesToString() << endl;
-            cout << gameEngine->getGameboard()->getCurrentPlayer()->playerBoardToString() << endl << endl;
-            fileIsIncorrect = gameEngine->getInputProcessing()->processPlayerInput(turns, gameEngine->getGameboard());
+            cout << gameEngine->getGameboard()->
+            getCurrentPlayer()->playerBoardToString() << endl << endl;
+            fileIsIncorrect = 
+            gameEngine->getInputProcessing()->processPlayerInput(
+                turns, gameEngine->getGameboard());
             if(fileIsIncorrect == false){
                 cout << "Save File has an incorrect turn" << endl;
                 file.close();
@@ -59,7 +63,7 @@ void Test::readSaveFile(string fileName){
         if(fileIsIncorrect == true){
             cout << "State of Game:" << endl;
             cout << gameEngine->getGameboard()->factoriesToString() << endl;
-            for(int i = 0; i < playerAmount; i++){
+            for(int i = ZERO; i < playerAmount; i++){
                 Player* player = players[i];
                 cout << player->playerBoardToString() << endl << endl;
             }
@@ -77,12 +81,12 @@ void Test::readSaveFile(string fileName){
 
 void Test::readTileBag(string tileBag){
     bool checkIn = false;
-    if((int)tileBag.length()-1 != tileBagSize){
+    if((int)tileBag.length()-ONE != tileBagSize){
         cout << "Bag Invalid" << endl;
         throw exception();
     }
     else{
-        for(int i = 0; i<(int) tileBag.length()-1; i++){
+        for(int i = ZERO; i<(int) tileBag.length()-ONE; i++){
             cout << tileBag[i];
             checkIn = gameEngine->getGameboard()->addTileBag(tileBag[i]);
             if(checkIn == false){

@@ -2,18 +2,19 @@
 #include <iostream>
 
 InputProcessing::InputProcessing() {
-    numValidTurns = 0;
+    numValidTurns = ZERO;
 }
 
 InputProcessing::~InputProcessing() {
 
 }
 
-bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboard) {
+bool InputProcessing::processPlayerInput(
+    string playerInput, Gameboard* gameboard) {
     bool isValidTurn = true;
     vector<std::string> tokens;
     string token;
-    int numTokens = 0;
+    int numTokens = ZERO;
     std::istringstream tokenStream(playerInput);
 
     // splits string into tokens and place into vector
@@ -22,32 +23,38 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
         numTokens++;
     }
 
-    if(numTokens != 1 && numTokens != 2 && numTokens != 4) {
+    if(numTokens != ONE && numTokens != TWO && numTokens != FOUR) {
         isValidTurn = false;
-    } else if(numTokens == 1) {
-        if(tokens[0] == "quit") {
+    } else if(numTokens == ONE) {
+        if(tokens[ZERO] == "quit") {
             throw std::exception();
         } else {
             isValidTurn = false;
         }
-    } else if(numTokens == 2) {
-        if(tokens[0] == "save") {
-            saveGame(tokens[1], gameboard);
-            std::cout << "Game sucessfully saved to - " << tokens[1] << std::endl;
+    } else if(numTokens == TWO) {
+        if(tokens[ZERO] == "save") {
+            saveGame(tokens[ONE], gameboard);
+            std::cout << "Game sucessfully saved to - " << tokens[ONE] <<
+             std::endl;
             isValidTurn = false;
         } else {
             isValidTurn = false;
         }
-    } else if(tokens[0] == "turn") {
-        int factory_row = std::stoi(tokens[1]);
-        int storage_row = std::stoi(tokens[3]);
+    } else if(tokens[ZERO] == "turn") {
+        int factory_row = std::stoi(tokens[ONE]);
+        int storage_row = std::stoi(tokens[THREE]);
 
-        if(factory_row == 0 && gameboard->getIsFirstTurn() == true) {
-            std::cout << "Invalid move - Cannot take from factory 0 in first turn" << std::endl;
+        if(factory_row == ZERO && gameboard->getIsFirstTurn() == true) {
+            std::cout << "Invalid move - Cannot take from factory 
+            0 in first turn" << std::endl;
             isValidTurn = false;
         } else {
-            if((factory_row >= 0 && factory_row <= 5) && (storage_row >= 1 && storage_row <= 5) && isAColour(*tokens[2].c_str())) {
-                isValidTurn = gameboard->FactoryTilesToPlayer(factory_row, storage_row, static_cast<Colour>(*tokens[2].c_str()));
+            if((factory_row >= ZERO && factory_row <= MAX_FACTORY) && (
+                storage_row >= MIN_STORAGE_ROW && storage_row <= MAX_STORAGE_ROW
+                ) && isAColour(*tokens[TWO].c_str())) {
+                isValidTurn = gameboard->FactoryTilesToPlayer(
+                    factory_row, storage_row, static_cast<Colour>(
+                        *tokens[TWO].c_str()));
             } else {
                 isValidTurn = false;
             }
@@ -87,7 +94,7 @@ void InputProcessing::saveGame(string fileName, Gameboard* gameboard) {
 
         saveFile << content;
 
-        for(int i = 0; i < numValidTurns; ++i) {
+        for(int i = ZERO; i < numValidTurns; ++i) {
             saveFile << validTurns[i] << '\n';
         }
 
