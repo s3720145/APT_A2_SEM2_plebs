@@ -179,7 +179,6 @@ bool Gameboard::getIsFirstTurn() {
 void Gameboard::setIsFirstTurn(bool isFirstTurn) {
     this->isFirstTurn = isFirstTurn;
 }
-
 const string Gameboard::factoriesToString() {
     stringstream ss;
 

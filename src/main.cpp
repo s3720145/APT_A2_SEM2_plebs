@@ -9,6 +9,9 @@ int main(int argc, char** argv) {
     MainMenu* mainMenu = new MainMenu();
     Test* testingMode = new Test();
 
+    std::cout << "Welcome to Azul!" << std::endl;
+    std::cout << "-------------------" << std::endl;
+
     if(argc == 3 && std::string(argv[1]) == "-t") {
         try{
             testingMode->readSaveFile(argv[2]);

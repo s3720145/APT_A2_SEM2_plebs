@@ -12,7 +12,7 @@ public:
     Test();
     ~Test();
     void readSaveFile(string fileName);
-    void readTileBag(char c);
+    void readTileBag(string tileBag);
 private:
     GameEngine* gameEngine;
     Player** players;
