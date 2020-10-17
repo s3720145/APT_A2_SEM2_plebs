@@ -16,6 +16,7 @@ public:
     void printCredits();
     void prompt();
     void quitGame();
+    GameEngine* getGameEngine();
 
 private:
     GameEngine* gameEngine;

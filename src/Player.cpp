@@ -297,17 +297,20 @@ void Player::setHasFirstPlayerTile(bool hasFirstPlayerTile) {
 
 const string Player::playerBoardToString() {
     stringstream ss;
-    
+    std::cout<< "thisit" << std::endl;
     ss << "Mosaic for " << playerName << ":\n";
 
     for(int row_num = ZERO; row_num < ARRAY_DIM; ++row_num) {
         ss << row_num + ONE << ": ";
+        std::cout<< "each row" << std::endl;
+        std::cout<< ARRAY_DIM << std::endl;
         // Prints the storage rows
         for(int col_num = ONE; col_num < ARRAY_DIM - row_num ; ++col_num) {
             ss << "  ";
         }
 
         for(int col_num = row_num; col_num >= ZERO; --col_num) {
+            std::cout<< (storageRows[row_num][col_num]) << std::endl;
             if(storageRows[row_num][col_num] == nullptr) {
                 ss << ". ";
             } else {

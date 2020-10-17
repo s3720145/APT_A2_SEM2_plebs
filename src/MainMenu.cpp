@@ -74,3 +74,6 @@ void MainMenu::quitGame() {
     std::cout << "Goodbye" << std::endl;
     throw exception();
 }
+GameEngine* MainMenu::getGameEngine(){
+    return gameEngine;
+}

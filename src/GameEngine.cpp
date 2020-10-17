@@ -21,13 +21,12 @@ void GameEngine::newGame() {
         gameboard->addNewPlayer(playerName);
         cout << endl;
     }
-
     cout << "Let's Play!"<< endl << endl;
 
     gameboard->setTileBag();
-
     for(int i = ZERO; i < NUM_ROUNDS; ++i) {
         newRound();
+        cout<<"end of Round done";
     }
     
     announceWinner();
@@ -112,11 +111,11 @@ void GameEngine::newRound() {
     // following round.
     
     gameboard->setFactories();
-
     cout << "=== Start Round ===" << endl;
 
     while(gameboard->isEndOfRound() == false) {
         newPlayerTurn();
+        cout<< "end turn";
     }
 
     cout << "=== END OF ROUND ===" << endl;
@@ -143,7 +142,7 @@ void GameEngine::newPlayerTurn() {
     cout << gameboard->factoriesToString() << endl;
     cout << gameboard->getCurrentPlayer()->playerBoardToString() <<
      endl << endl;
-
+    cout<< "here1"<< endl;
     do {
         cout << "> ";
         std::getline(cin >> std::ws, playerInput);

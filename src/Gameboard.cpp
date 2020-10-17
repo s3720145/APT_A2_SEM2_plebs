@@ -35,6 +35,50 @@ void Gameboard::setTileBag() {
 
     file.close();
 }
+void Gameboard::randomizeTileBag(int seed, int mode){
+    srand(seed);
+    string tileTypes;
+    int tileCount;
+    int tileAmount = 20;
+    int tileTotal;
+    int counter = ZERO;
+    if(mode == SIX_TILE){
+        tileTypes = "UYBRLO";
+        tileCount = 6;
+        tileTotal = 120;
+    }
+    else{
+        tileTypes = "UYBRL";
+        tileCount = 5;
+        tileTotal = 100;
+    }
+    for(int i=0; i<tileCount;i++){
+        for(int j = 0; j < tileAmount; j++){
+            char temp = tileTypes[i];
+            unShuffledBag.push_back(temp);
+        }
+    }
+    while(counter < tileTotal){
+        int r = random()%(tileTotal - counter);
+        shuffledBag.push_back(unShuffledBag[r]);
+        unShuffledBag.erase(unShuffledBag.begin() + r);
+        counter++;
+    }
+    std::ofstream defaultTileBag("src/DefaultTileBag.txt");
+    string tileBagFinal;
+    for(int i=0; i < tileTotal; i++){
+        tileBagFinal += shuffledBag[i];
+    }
+    if(defaultTileBag.fail()) {
+        std::cout << "TileBag file doesn't exist! please create one before continuing to play!(DefaultTileBag.txt)" << std::endl;
+    } else {
+
+        defaultTileBag << tileBagFinal;
+    }
+
+    defaultTileBag.close();
+
+}
 bool Gameboard::addTileBag(char c){
     bool output = false;
     InputProcessing* charCheck= new InputProcessing();

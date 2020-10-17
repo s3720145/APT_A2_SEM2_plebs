@@ -9,6 +9,9 @@
 #define NUM_PER_TILE    20
 #define FACTORY_WIDTH   4
 #define playerCount     2
+#define NORMAL          0
+#define GRAY            1
+#define SIX_TILE        2
 
 using std::vector;
 using std::stringstream;
@@ -21,6 +24,9 @@ public:
 
     // generates the tile bag from DefaultTileBag.txt
     void setTileBag();
+    // randomizes the bag depending on seed
+    void randomizeTileBag(int seed, int mode);
+    //adds a tile to the bag assuming its a char
     bool addTileBag(char c);
 
     // sets factories by pulling from tile bag
@@ -67,7 +73,8 @@ private:
     int centreFactorySize;
     vector<Tile*> centreFactory;
     Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
-
+    vector<char> unShuffledBag;
+    vector<char> shuffledBag;
     int playerAmount;
     int currentPlayerIter;
 

@@ -20,7 +20,20 @@ int main(int argc, char** argv) {
         }
     }
     else{
+        int seed;
+        unsigned int randomSeed = atoi(argv[2]);
+        if(argc == 3 && std::string(argv[1]) == "-s"){
+            srand(randomSeed);
+            seed = rand();
+        }
+        else{
+            srand(time(NULL));
+            seed = rand();
+        }
         try {
+            #undef SEED
+            #define SEED seed
+            mainMenu->getGameEngine()->getGameboard()->randomizeTileBag(seed, 0);
             mainMenu->displayMenu();
         } catch(...) {
             mainMenu->~MainMenu();
