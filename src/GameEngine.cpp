@@ -142,7 +142,6 @@ void GameEngine::newPlayerTurn() {
     cout << gameboard->factoriesToString() << endl;
     cout << gameboard->getCurrentPlayer()->playerBoardToString() <<
      endl << endl;
-    cout<< "here1"<< endl;
     do {
         cout << "> ";
         std::getline(cin >> std::ws, playerInput);

@@ -211,20 +211,29 @@ bool Gameboard::isEndOfRound() {
 
 void Gameboard::endRound() {
     vector<Tile*> returningTiles;
-
     for(int i = ZERO; i < playerCount; ++i) {
         returningTiles = players[i]->cleanUp();
-
-        for(Tile* tile : returningTiles) {
-            tileBag->addToBack(tile);
-        }
-
+        boxLid.insert(boxLid.end(), returningTiles.begin(), returningTiles.end());
         if(players[i]->getHasFirstPlayerTile() == true) {
             currentPlayerIter = i;
             players[i]->setHasFirstPlayerTile(false);
         }
-    }
 
+    }
+    if(tileBag->getHead() == nullptr){
+        int tileTotalAmount;
+        if(ARRAY_DIM == 6){
+            tileTotalAmount = 120;
+        }
+        else{
+            tileTotalAmount = 100;
+        }
+        for(int i=0; i < tileTotalAmount; i++){
+            int r = random()%(tileTotalAmount - i);
+            tileBag->addToBack(boxLid[r]);
+            boxLid.erase(boxLid.begin() + r);
+        }
+    }
     isFirstTurn = true;
 }
 

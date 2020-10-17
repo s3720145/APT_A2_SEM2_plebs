@@ -75,6 +75,7 @@ private:
     Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
     vector<char> unShuffledBag;
     vector<char> shuffledBag;
+    vector<Tile*> boxLid;
     int playerAmount;
     int currentPlayerIter;
 

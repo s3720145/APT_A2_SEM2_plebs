@@ -91,7 +91,6 @@ void InputProcessing::saveGame(string fileName, Gameboard* gameboard) {
         string defaultTileBag;
 
         getline(file, defaultTileBag);
-
         saveFile << defaultTileBag << '\n';
 
         content = gameboard->playerNamesToString();

@@ -19,7 +19,6 @@ void Test::readSaveFile(string fileName){
     if(file.is_open()) {
         //todo if tile bag isnt 100
         getline(file, tileBag);
-        cout << (int)tileBag.length();
         readTileBag(tileBag);
         // after reading the tiles the file is still on the first line, therefor i need to move to the second line and use a buffer
         while(addedPlayers < playerAmount){
@@ -30,7 +29,6 @@ void Test::readSaveFile(string fileName){
         }
         while (getline(file, turns)){
             //std::stringbuf string = (std::stringbuf) turns;
-            cout << turns << endl;
             //cin.rdbuf(&string);
             if(newRound){
                 gameEngine->getGameboard()->setFactories();
@@ -87,7 +85,6 @@ void Test::readTileBag(string tileBag){
     }
     else{
         for(int i = ZERO; i<(int) tileBag.length()-ONE; i++){
-            cout << tileBag[i];
             checkIn = gameEngine->getGameboard()->addTileBag(tileBag[i]);
             if(checkIn == false){
                 cout << "Bag Invalid" << endl;
