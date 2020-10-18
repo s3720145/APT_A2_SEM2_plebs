@@ -15,16 +15,32 @@ void Test::readSaveFile(string fileName){
     string turns;
     bool newRound = true;
     bool fileIsIncorrect = true;
+    bool modeTypeCorrect = false;
+    string modeSaved;
     players = gameEngine->getGameboard()->getPlayers();
     if(file.is_open()) {
-        //todo if tile bag isnt 100
+        getline(file, modeSaved);
+        int modeType = stoi(modeSaved);
+        if(modeType == 0){
+            modeTypeCorrect = true;
+        }
+        else if(modeType == 1){
+            modeTypeCorrect = true;
+        }
+        else if(modeType == 2){
+            modeTypeCorrect = true;
+        }
+        else{
+            cout << "Mode is wrong, unable to start game!";
+        }
+        if(modeTypeCorrect == true){
         getline(file, tileBag);
         readTileBag(tileBag);
         // after reading the tiles the file is still on the first line, therefor i need to move to the second line and use a buffer
         while(addedPlayers < playerAmount){
             string playerName;
             getline(file, playerName);
-            gameEngine->getGameboard()->addNewPlayer(playerName);
+            gameEngine->getGameboard()->addNewPlayer(playerName, modeType);
             addedPlayers++;
         }
         while (getline(file, turns)){
@@ -65,6 +81,7 @@ void Test::readSaveFile(string fileName){
                 Player* player = players[i];
                 cout << player->playerBoardToString() << endl << endl;
             }
+        }
         }
     } else {
         cout << "ERROR - CANNOT FIND - " << fileName << endl;

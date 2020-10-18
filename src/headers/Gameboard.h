@@ -40,7 +40,7 @@ public:
     bool FactoryTilesToPlayer(int factory_row, int storage_row, Colour colour);
 
     // adds a new player into the gameboard
-    void addNewPlayer(string playerName);
+    void addNewPlayer(string playerName, int arrayDim);
 
     // gets the curren player, or the player who's turn it currently is
     Player* getCurrentPlayer();
@@ -72,12 +72,13 @@ private:
 
     int centreFactorySize;
     vector<Tile*> centreFactory;
-    Tile* factories[ARRAY_DIM][FACTORY_WIDTH];
+    Tile*** factories;
     vector<char> unShuffledBag;
     vector<char> shuffledBag;
     vector<Tile*> boxLid;
     int playerAmount;
     int currentPlayerIter;
+    int ARRAY_DIM;
 
     bool isFirstTurn;
 };

@@ -55,7 +55,7 @@ bool InputProcessing::processPlayerInput(string playerInput, Gameboard* gameboar
             isValidTurn = false;
         } else {
             if((factory_row >= ZERO && factory_row <= 5) && 
-            (storage_row >= ZERO && storage_row <= 5) && 
+            (storage_row >= ZERO && storage_row <= ARRAY_DIM) && 
             isAColour(*tokens[TWO].c_str())) {
                 isValidTurn = gameboard->FactoryTilesToPlayer(factory_row, 
                 storage_row, static_cast<Colour>(*tokens[TWO].c_str()));
@@ -89,7 +89,7 @@ void InputProcessing::saveGame(string fileName, Gameboard* gameboard) {
     } else {
         std::ifstream file("src/DefaultTileBag.txt");
         string defaultTileBag;
-
+        saveFile << mode << '\n';
         getline(file, defaultTileBag);
         saveFile << defaultTileBag << '\n';
 
@@ -120,7 +120,20 @@ bool InputProcessing::isAColour(char c) {
         isColour = true;
     } else if(c == 'L') {
         isColour = true;
+    } else if(mode == SIX_TILE){
+        if(c == 'O'){
+            isColour = true;
+        }
     }
 
     return isColour;
+}
+void InputProcessing::setMode(int modeIn){
+    mode = modeIn;
+    if(mode == 2){
+        ARRAY_DIM = 6;
+    }
+    else{
+        ARRAY_DIM = 5;
+    }
 }

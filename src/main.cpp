@@ -31,9 +31,7 @@ int main(int argc, char** argv) {
             seed = rand();
         }
         try {
-            // std::cout << seed << "\n";
-            // mainMenu->getGameEngine()->getInputProcessing()->setSeed(seed);
-            mainMenu->getGameEngine()->getGameboard()->randomizeTileBag(seed, 0);
+            mainMenu->getGameEngine()->setSeed(seed);
             mainMenu->displayMenu();
         } catch(...) {
             mainMenu->~MainMenu();

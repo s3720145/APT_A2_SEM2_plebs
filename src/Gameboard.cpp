@@ -46,11 +46,17 @@ void Gameboard::randomizeTileBag(int seed, int mode){
         tileTypes = "UYBRLO";
         tileCount = 6;
         tileTotal = 120;
+        ARRAY_DIM = 6;
     }
     else{
         tileTypes = "UYBRL";
         tileCount = 5;
         tileTotal = 100;
+        ARRAY_DIM = 5;
+    }
+    factories = new Tile**[FIVE];
+    for(int i = 0; i < ARRAY_DIM; i++){
+        factories[i] = new Tile*[FACTORY_WIDTH];
     }
     for(int i=0; i<tileCount;i++){
         for(int j = 0; j < tileAmount; j++){
@@ -97,7 +103,7 @@ void Gameboard::setFactories() {
     centreFactory.push_back(new Tile('F'));
     centreFactorySize = 1;
     
-    for(int row_num = ZERO; row_num < ARRAY_DIM; ++row_num) {
+    for(int row_num = ZERO; row_num < FIVE; ++row_num) {
         for(int col_num = ZERO; col_num < FACTORY_WIDTH; ++col_num) {
             factories[row_num][col_num] = tileBag->removeHead();
         }
@@ -153,16 +159,17 @@ Colour colour) {
 
         // if the number of tiles being inserted is larger than 0 attempt to insert into storage row
         if(numInsertedTiles > ZERO && storage_row != ZERO) {
-            players[currentPlayerIter]->
-            insertIntoStorageRow(storage_row - 1, numInsertedTiles, insertedTiles);
+            insertedTiles = 
+            players[currentPlayerIter]->insertIntoStorageRow(storage_row - 1, numInsertedTiles, insertedTiles);
             operationSuccess = true;
         } else if(numInsertedTiles > ZERO && storage_row == ZERO) {
             // else if storage_row = 0 insert all tiles straight into broken tiles
             for(Tile* tile : insertedTiles) {
                 if(players[currentPlayerIter]->insertIntoBrokenTiles(tile) == false) {
-                    tileBag->addToBack(tile);
+                    boxLid.push_back(tile);
                 }
             }
+            insertedTiles.clear();
             operationSuccess = true;
         }
     }
@@ -170,8 +177,8 @@ Colour colour) {
     return operationSuccess;
 }
 
-void Gameboard::addNewPlayer(string playerName) {
-    players[playerAmount] = new Player(playerName);
+void Gameboard::addNewPlayer(string playerName, int arrayDim) {
+    players[playerAmount] = new Player(playerName, arrayDim);
     playerAmount++;
 }
 
@@ -254,7 +261,7 @@ const string Gameboard::factoriesToString() {
     }
     ss << '\n';
 
-    for(int row_num = ZERO; row_num < ARRAY_DIM; ++row_num) {
+    for(int row_num = ZERO; row_num < FIVE; ++row_num) {
         ss << row_num + 1 << ": ";
         for(int col_num = ZERO; col_num < FACTORY_WIDTH; ++col_num) {
             if(factories[row_num][col_num] != nullptr) {

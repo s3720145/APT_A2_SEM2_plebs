@@ -7,6 +7,7 @@ enum Colour {
     RED = 'R',
     BLACK = 'U',
     LIGHT_BLUE = 'L',
+    ORANGE = 'O',
     FIRST_PLAYER = 'F',
 };
 

@@ -1,6 +1,5 @@
 #ifndef INPUTPROCESSING
 #define INPUTPROCESSING
-
 #include "Gameboard.h"
 class InputProcessing {
 public:
@@ -16,13 +15,14 @@ public:
     // checks if the char corresponds to an enum colour
     bool isAColour(char c);
 
-    // sets seed that was randomized or chosen
-    // void setSeed(int seed);
+    //mode passon
+    void setMode(int mode);
 
 private:
     vector<string> validTurns;
     int numValidTurns;
-    // int seed;
+    int mode;
+    int ARRAY_DIM;
 };
 
 #endif // INPUTPROCESSING

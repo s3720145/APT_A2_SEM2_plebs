@@ -10,23 +10,29 @@ GameEngine::~GameEngine() {
     inputProcessing->~InputProcessing();
 }
 
-void GameEngine::newGame() {
+void GameEngine::newGame(int modeIn) {
+    endOfGame = false;
     cout << "Starting a New Game" << endl << endl;
-
+    mode = modeIn;
+    inputProcessing->setMode(mode);
+    gameboard->randomizeTileBag(seed, mode);
+    int arrayDim = 5;
+    if(mode == 2){
+        arrayDim = 6;
+    }
     for(int i = ZERO; i < MAX_PLAYERS; ++i) {
         string playerName;
         cout << "Enter a name for player " << i << endl;
         cout << "> ";
         cin >> playerName;
-        gameboard->addNewPlayer(playerName);
+        gameboard->addNewPlayer(playerName, arrayDim);
         cout << endl;
     }
     cout << "Let's Play!"<< endl << endl;
 
     gameboard->setTileBag();
-    for(int i = ZERO; i < NUM_ROUNDS; ++i) {
+    while(endOfGame == false){
         newRound();
-        cout<<"end of Round done";
     }
     
     announceWinner();
@@ -36,14 +42,30 @@ void GameEngine::loadGame() {
     string input;
     string tileBag;
     bool isNewRound = true;
-    int roundPassed = ZERO;
     bool roundComplete = true;
     bool fileIsIncorrect = true;
+    bool modeTypeCorrect = false;
+    string modeSaved;
     string turns;
     cout << "Enter file name: " << endl;
     cin >> input;
     std::ifstream file("src/Savefiles/" + input);
     if(file.is_open()) {
+        getline(file, modeSaved);
+        int modeType = stoi(modeSaved);
+        if(modeType == 0){
+            modeTypeCorrect = true;
+        }
+        else if(modeType == 1){
+            modeTypeCorrect = true;
+        }
+        else if(modeType == 2){
+            modeTypeCorrect = true;
+        }
+        else{
+            cout << "Mode is wrong, unable to start game!";
+        }
+        if(modeTypeCorrect == true){
         getline(file, tileBag);
         readTileBag(tileBag);
         cout << "Starting a New Game" << endl << endl;
@@ -53,7 +75,7 @@ void GameEngine::loadGame() {
             cout << "Enter a name for player " << i << endl;
             cout << "> ";
             getline(file, playerName);
-            gameboard->addNewPlayer(playerName);
+            gameboard->addNewPlayer(playerName, modeType);
             cout << endl;
         }
         cout << "Let's Play!"<< endl << endl;
@@ -82,20 +104,30 @@ void GameEngine::loadGame() {
                 gameboard->setNextCurrentPlayer();
                 if(gameboard->isEndOfRound()){
                     isNewRound = true;
-                    gameboard->endRound();
-                    roundPassed++;
                     roundComplete = true;
                     cout << "=== END OF ROUND ===" << endl;
+                    gameboard->endRound();
+                    Player** players = gameboard->getPlayers();
+
+                    for(int i = ZERO; i < MAX_PLAYERS; ++i) {
+                        cout << players[i]->playerBoardToString() << endl;
+                        cout << "Current round score: " << players[i]->getCurrRoundScore() <<
+                        endl << endl;
+                        if(players[i]->getEnd() == true){
+                            endOfGame = true;
+                        }
+                    }
                 }
             }
         }
         if(roundComplete == false){
             newPlayerTurn();
         }
-        for(int i = roundPassed; i < NUM_ROUNDS; ++i) {
+        while(endOfGame == false){
             newRound();
         }
         announceWinner();
+        }
     }else {
         cout << "ERROR - CANNOT FIND - " << input << endl;
     }
@@ -115,7 +147,6 @@ void GameEngine::newRound() {
 
     while(gameboard->isEndOfRound() == false) {
         newPlayerTurn();
-        cout<< "end turn";
     }
 
     cout << "=== END OF ROUND ===" << endl;
@@ -124,13 +155,16 @@ void GameEngine::newRound() {
 
     Player** players = gameboard->getPlayers();
 
-    for(int i = ZERO; i < playerCount; ++i) {
+    for(int i = ZERO; i < MAX_PLAYERS; ++i) {
         cout << players[i]->playerBoardToString() << endl;
         cout << "Current round score: " << players[i]->getCurrRoundScore() <<
          endl << endl;
+        if(players[i]->getEnd() == true){
+            endOfGame = true;
+        }
     }
-    
 }
+    
 
 void GameEngine::newPlayerTurn() {
     string playerInput;
@@ -215,4 +249,6 @@ Gameboard* GameEngine::getGameboard() {
 InputProcessing* GameEngine::getInputProcessing() {
     return inputProcessing;
 }
-
+void GameEngine::setSeed(int seedIn){
+    seed = seedIn;
+}

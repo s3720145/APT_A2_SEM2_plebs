@@ -43,7 +43,33 @@ void MainMenu::prompt() {
 }
 
 void MainMenu::createNewGame() {
-    gameEngine->newGame();
+    std::string input;
+    int mode = 0;
+    std::cout << std::endl;
+    std::cout << "Game Mode" << std::endl;
+    std::cout << "----" << std::endl;
+    std::cout << "1. Normal Game" << std::endl;
+    std::cout << "2. Grey Board" << std::endl;
+    std::cout << "3. Six Tiles" << std::endl;
+    std::cout << "4. Quit" << std::endl;
+    std::cout << std::endl << "> ";
+    std::cin >> input;
+    if(std::cin.eof() == true){
+        std::cout << std::endl;
+        quitGame();
+    } else if(input == "1") {
+        mode = 0;
+    } else if(input == "2") {
+        mode = 1;
+    } else if(input == "3") {
+        mode = 2;
+    } else if(input == "4") {
+        quitGame();
+    } else {
+        std::cout << "Invalid Input";
+        createNewGame();
+    }
+    gameEngine->newGame(mode);
 }
 
 void MainMenu::loadSaveGame() {

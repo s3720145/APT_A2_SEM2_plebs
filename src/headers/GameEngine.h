@@ -19,7 +19,7 @@ public:
     ~GameEngine();
 
     // starts a new game composing of 5 rounds
-    void newGame();
+    void newGame(int modeIn);
 
     // loads a game state from a save file
     void loadGame();
@@ -32,6 +32,7 @@ public:
 
     Gameboard* getGameboard();
     InputProcessing* getInputProcessing();
+    void setSeed(int seedIn);
 
     // prints end of game scores and prints the winner
     void announceWinner();
@@ -41,6 +42,9 @@ private:
     Gameboard* gameboard;
     InputProcessing* inputProcessing;
     string tileBagOrder;
+    int mode;
+    int seed;
+    bool endOfGame;
 };
 
 #endif // GAMEENGINE
